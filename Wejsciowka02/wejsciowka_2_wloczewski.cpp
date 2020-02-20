@@ -11,10 +11,10 @@ void CzyszczenieBufora() {
 
 /*
 @ brief		Funkcja do uzupelnienia tablicy jak podano w zadaniu
-			Wiemy, ¿e tablica ma okreœlone wymiary. Wysokoœæ, jest
-			zapisana w sta³en N, a szerokoœæ w sta³ej M
+			Wiemy, ze tablica ma okreslone wymiary. Wysokosc, jest
+			zapisana w stalen N, a szerokosc w stalej M.
 @ param		**tab
-			WskaŸnik do tablicy wskaŸników. Ka¿dy z jej elementów
+			Wskaznik do tablicy wskaznikow. Kazdy z jej elementow
 			to tablica typu char, przechowuj¹ca alfabet.
 */
 void UzupelnijTablice(char** tab) {
@@ -37,10 +37,10 @@ void UzupelnijTablice(char** tab) {
 
 /*
 @ brief		Funkcja do wypisania tablicy
-			Wiemy, ¿e tablica ma okreœlone wymiary. Wysokoœæ, jest
-			zapisana w sta³en N, a szerokoœæ w sta³ej M
+			Wiemy, ze tablica ma okreslone wymiary. Wysokosc, jest
+			zapisana w stalen N, a szerokosc w stalej M.
 @ param		**tab 
-			WskaŸnik do tablicy wskaŸników. Ka¿dy z jej elementów
+			Wskaznik do tablicy wskaznikow. Kazdy z jej elementow
 			to tablica typu char, przechowuj¹ca alfabet.
 */
 void WypiszTablice(char** tab) {
@@ -53,12 +53,12 @@ void WypiszTablice(char** tab) {
 }
 
 /*
-@ brief		Funkcja do wczytania s³owa.
-			Wiemy, ¿e u¿ytkownik poda s³owo o ustalnej d³ugoœci,
-			która jest zapisana w sta³ej oraz ¿e siê nie pomyli
+@ brief		Funkcja do wczytania slowa.
+			Wiemy, ze uzytkownik poda slowo o ustalnej dlugosci,
+			ktora jest zapisana w stalej oraz ze siê nie pomyli
 			podczas wpisywania.
 @ param		*tab
-			WskaŸnik do tablicy, która ma przechowaæ s³owo.
+			Wskaznik do tablicy, ktora ma przechowac slowo.
 */
 void WczytajSlowo(char* tab) {
 	for (int i = 0; i < DLUGOSC; i++) {
@@ -68,11 +68,11 @@ void WczytajSlowo(char* tab) {
 }
 
 /*
-@ brief		Funkcja do wypisania s³owa.
-			Wiemy, ¿e podane przez u¿ytkownika s³owo jest
-			ustalonej d³ugoœci, która jest przechowywana w sta³ej.
+@ brief		Funkcja do wypisania slowa.
+			Wiemy, ze podane przez uzytkownika slowo jest
+			ustalonej dlugosci, ktora jest przechowywana w stalej.
 @ param		*tab
-			WskaŸnik do tablicy przechowuj¹cej kolejne znaki.
+			Wskaznik do tablicy przechowuj¹cej kolejne znaki.
 */
 void WypiszSlowo(char* tab) {
 	for (int i = 0; i < DLUGOSC; i++) {
