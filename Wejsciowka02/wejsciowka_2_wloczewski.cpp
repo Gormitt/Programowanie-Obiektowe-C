@@ -9,6 +9,14 @@ void CzyszczenieBufora() {
 	while (getchar() != '\n') {}
 }
 
+/*
+@ brief		Funkcja do uzupelnienia tablicy jak podano w zadaniu
+			Wiemy, ¿e tablica ma okreœlone wymiary. Wysokoœæ, jest
+			zapisana w sta³en N, a szerokoœæ w sta³ej M
+@ param		**tab
+			WskaŸnik do tablicy wskaŸników. Ka¿dy z jej elementów
+			to tablica typu char, przechowuj¹ca alfabet.
+*/
 void UzupelnijTablice(char** tab) {
 	int indeks = 0;
 	char wpis = 'a';
@@ -27,6 +35,14 @@ void UzupelnijTablice(char** tab) {
 	}
 }
 
+/*
+@ brief		Funkcja do wypisania tablicy
+			Wiemy, ¿e tablica ma okreœlone wymiary. Wysokoœæ, jest
+			zapisana w sta³en N, a szerokoœæ w sta³ej M
+@ param		**tab 
+			WskaŸnik do tablicy wskaŸników. Ka¿dy z jej elementów
+			to tablica typu char, przechowuj¹ca alfabet.
+*/
 void WypiszTablice(char** tab) {
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < M; j++) {
@@ -36,6 +52,14 @@ void WypiszTablice(char** tab) {
 	}
 }
 
+/*
+@ brief		Funkcja do wczytania s³owa.
+			Wiemy, ¿e u¿ytkownik poda s³owo o ustalnej d³ugoœci,
+			która jest zapisana w sta³ej oraz ¿e siê nie pomyli
+			podczas wpisywania.
+@ param		*tab
+			WskaŸnik do tablicy, która ma przechowaæ s³owo.
+*/
 void WczytajSlowo(char* tab) {
 	for (int i = 0; i < DLUGOSC; i++) {
 		tab[i] = getchar();
@@ -43,6 +67,13 @@ void WczytajSlowo(char* tab) {
 	CzyszczenieBufora(); // po wczytaniu 10 znakow w buforze pozostaje enter, ktory trzeba usunac, zeby poprawnie wczytywac dalsze dane
 }
 
+/*
+@ brief		Funkcja do wypisania s³owa.
+			Wiemy, ¿e podane przez u¿ytkownika s³owo jest
+			ustalonej d³ugoœci, która jest przechowywana w sta³ej.
+@ param		*tab
+			WskaŸnik do tablicy przechowuj¹cej kolejne znaki.
+*/
 void WypiszSlowo(char* tab) {
 	for (int i = 0; i < DLUGOSC; i++) {
 		printf("%c", tab[i]);
@@ -50,9 +81,10 @@ void WypiszSlowo(char* tab) {
 	putchar('\n');
 }
 
+
 int main() {
 	char** a = new char*[N];
-	char* b = new char[DLUGOSC];
+	char** b = new char*[DLUGOSC];
 	char* slowo = new char[DLUGOSC];
 
 	for (int i = 0; i < N; i++) {
@@ -62,10 +94,25 @@ int main() {
 		b[i] = NULL;
 	}
 
+	printf("Uzupelniam tablice kodujaca alfabetem.\n");
 	UzupelnijTablice(a);
+	printf("Wygenerowana tablica: \n");
 	WypiszTablice(a);
+	printf("Podaj slowo o dokldnej dlugosci %d znakow: ", DLUGOSC);
 	WczytajSlowo(slowo);
-	WypiszSlowo(slowo);
+
+	for (int i = 0; i < DLUGOSC; i++) {
+		for (int j = 0; j < N; j++) {
+			for (int k = 0; k < M; k++) {
+				if (slowo[i] == a[j][k]) b[i] = &a[j][k];
+			}
+		}
+	}
+
+	printf("Podane slowo: ");
+	for (int i = 0; i < DLUGOSC; i++) {
+		printf("%c", *b[i]);
+	}
 
 	for (int i = 0; i < N; i++) {
 		delete[] a[i];
