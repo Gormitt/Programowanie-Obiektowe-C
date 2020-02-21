@@ -3,7 +3,8 @@
 
 #define N 5 // wysokosc macierzy
 #define M 5 // szerokosc macierzy
-#define DLUGOSC 10 // dlugosc wczytywanego slowa
+#define DLUGOSC_SLOWA 10 // dlugosc wczytywanego slowa
+#define DLUGOSC_ALFABETU 25
 
 void CzyszczenieBufora() {
 	while (getchar() != '\n') {}
@@ -61,7 +62,7 @@ void WypiszTablice(char** tab) {
 			Wskaznik do tablicy, ktora ma przechowac slowo.
 */
 void WczytajSlowo(char* tab) {
-	for (int i = 0; i < DLUGOSC; i++) {
+	for (int i = 0; i < DLUGOSC_SLOWA; i++) {
 		tab[i] = getchar();
 	}
 	CzyszczenieBufora(); // po wczytaniu 10 znakow w buforze pozostaje enter, ktory trzeba usunac, zeby poprawnie wczytywac dalsze dane
@@ -75,22 +76,64 @@ void WczytajSlowo(char* tab) {
 			Wskaznik do tablicy przechowuj¹cej kolejne znaki.
 */
 void WypiszSlowo(char* tab) {
-	for (int i = 0; i < DLUGOSC; i++) {
+	for (int i = 0; i < DLUGOSC_SLOWA; i++) {
 		printf("%c", tab[i]);
 	}
 	putchar('\n');
 }
 
+/*
+@ brief		Funkcja do wypisania wartosci na jakie wskazuje tablica B
+@ param		**tab
+			Wskaznik do tablicy wskaznikow, ktorych wartosci wypiszemy na ekran,
+			ktorej dlugosc jest w stalej DLUGOSC_SLOWA.
+*/
+void WypiszWartosciWskaznikow(char** tab) {
+	for (int i = 0; i < DLUGOSC_SLOWA; i++) {
+		printf("%c", *tab[i]);
+	}
+	putchar('\n');
+}
+
+/*
+@ brief		Funkcja do przesuniecia rzedow w tablicy dwuwymiarowej 
+			o podana liczbe w dol.
+@ param		**tab
+			Wskaznik do tablicy wskaznikow, czyli do tabeli na ktorej
+			wykonamy operacje.
+@ param		przesuniecie
+			Liczba calkowita z przedzialu [-N, N] ktora informuje nas 
+			o ile rzedow chcemy przemiescic kazdy istniejacy rzad W DOL.
+			W przypadku liczby ujemnej, przemieszczenie nastepuje W GORE.
+*/
+void PrzemiescRzedy(char** tab, int przesuniecie) {
+	// a.: zminimalizowanie przemieszczenia b.: zamiana na liczbe dodatnia
+	przesuniecie = (przesuniecie % N) + N; 
+	if (przesuniecie == 0) return; // takie przesuniecia doprowadza do punktu wyjsica
+	
+	char ostatniRzad[M];
+	for (int i = 0; i < M; i++) {
+		ostatniRzad[i] = tab[N - 1][i];
+	}
+	for (int i = N - 1; i > 0; i--) {
+		for (int j = 0; j < M; j++) {
+			tab[i][j] = tab[(i + przesuniecie) % N][j];
+		}
+	}
+	for (int i = 0; i < M; i++) {
+		tab[0][i] = ostatniRzad[i];
+	}
+}
 
 int main() {
-	char** a = new char*[N];
-	char** b = new char*[DLUGOSC];
-	char* slowo = new char[DLUGOSC];
+	char** a = new char*[N]; // alokacja tablicy dwuwymiarowej z charami
+	char** b = new char*[DLUGOSC_SLOWA]; // alokacja tablicy jednowymiarowej ze wskaznikami
+	char* slowo = new char[DLUGOSC_SLOWA]; // alokacja tablicy jednoywmiarowej z charami
 
-	for (int i = 0; i < N; i++) {
+	for (int i = 0; i < N; i++) { // alokacja rzedow w tablicy dwuwymiarowej 
 		a[i] = new char[M];
 	}
-	for (int i = 0; i < DLUGOSC; i++) {
+	for (int i = 0; i < DLUGOSC_SLOWA; i++) { // uzupelnienie tablicy ze wskaznikami wartosciami NULL
 		b[i] = NULL;
 	}
 
@@ -98,10 +141,10 @@ int main() {
 	UzupelnijTablice(a);
 	printf("Wygenerowana tablica: \n");
 	WypiszTablice(a);
-	printf("Podaj slowo o dokldnej dlugosci %d znakow: ", DLUGOSC);
+	printf("Podaj slowo o dokldnej dlugosci %d znakow: ", DLUGOSC_SLOWA);
 	WczytajSlowo(slowo);
 
-	for (int i = 0; i < DLUGOSC; i++) {
+	for (int i = 0; i < DLUGOSC_SLOWA; i++) {
 		for (int j = 0; j < N; j++) {
 			for (int k = 0; k < M; k++) {
 				if (slowo[i] == a[j][k]) b[i] = &a[j][k];
@@ -110,16 +153,19 @@ int main() {
 	}
 
 	printf("Podane slowo: ");
-	for (int i = 0; i < DLUGOSC; i++) {
-		printf("%c", *b[i]);
-	}
+	WypiszWartosciWskaznikow(b);
 
-	for (int i = 0; i < N; i++) {
+	PrzemiescRzedy(a, 1);
+	WypiszTablice(a);
+
+	for (int i = 0; i < N; i++) { // dealokacja rzedow w tablicy dwuwymiarowej
 		delete[] a[i];
 	}
 
-	delete[] a;
-	delete[] b;
-	delete[] slowo;
+	delete[] a; // dealokacja tablicy dwuwymiarowe
+	delete[] b; // dealokacja tablicy ze wskaznikami
+	delete[] slowo; // dealokacja tablicy z charami
 	return 0;
 }
+
+// TODO naprawic przemieszczanie rzedow
