@@ -5,9 +5,27 @@
 #define M 5 // szerokosc macierzy
 #define DLUGOSC_SLOWA 5 // dlugosc wczytywanego slowa
 #define DLUGOSC_ALFABETU 25
+#define LICZBA_SZYFRUJACA 3 // ile rzedow zostanie przesunietych w gore, podczas przesuwania zawartosci tablicy
 
+/*
+@ brief		Funkcja do czyszczenia zawartosci bufora.
+*/
 void CzyszczenieBufora() {
 	while (getchar() != '\n') {}
+}
+
+/*
+@ brief		Funkcja do wypisania informacji o autorze i przeznaczeniu programu.
+*/
+void Info() {
+	printf("autor: \tMateusz Wloczewski\n");
+	printf("data: \t23 luty 2020\n");
+	printf("about: \tWejsciowka na 2 laboratoria.\n");
+	printf("\tProgram zaszyfrowuje slowo w nastepujacy sposob: \n");
+	printf("\t1. generuje tablice znakow (alfabet) i prosi o podanie slowa, ktore sklada sie ze znakow z tablicy,\n");
+	printf("\t2. program zapamieta pozycje komorek w tablicy, zawierajace litery podanego slowa,\n");
+	printf("\t3. program przestawi tablice i odczyta zapamietane wspolrzedne [dzieki temu slowo jest zaszyforwane],\n");
+	printf("\t4. na koniec przywroci stare ustawienie tablicy i ponownie wypisze zapamietane wspolrzedne [slowo zostanie odszyfrowane].\n\n");
 }
 
 /*
@@ -138,11 +156,14 @@ int main() {
 		b[i] = NULL;
 	}
 
+	Info();
+
 	printf("Uzupelniam tablice kodujaca alfabetem.\n");
 	UzupelnijTablice(a);
-	printf("Wygenerowana tablica: \n");
+	printf("Wygenerowana tablica kodowania znakow: \n");
 	WypiszTablice(a);
-	printf("Podaj slowo o dokldnej dlugosci %d znakow: ", DLUGOSC_SLOWA);
+
+	printf("Podaj slowo o dokldnej dlugosci %d znakow. Znaki musza zawierac sie w powyzszej tablicy: ", DLUGOSC_SLOWA);
 	WczytajSlowo(slowo);
 
 	for (int i = 0; i < DLUGOSC_SLOWA; i++) {
@@ -155,10 +176,10 @@ int main() {
 
 	printf("Podane slowo: ");
 	WypiszWartosciWskaznikow(b);
-	PrzemiescRzedy(a, 2);
+	PrzemiescRzedy(a, LICZBA_SZYFRUJACA);
 	printf("Zakodowane slowo to: ");
 	WypiszWartosciWskaznikow(b);
-	PrzemiescRzedy(a, -2);
+	PrzemiescRzedy(a, -LICZBA_SZYFRUJACA);
 	printf("Rozkodowane slowo to: ");
 	WypiszWartosciWskaznikow(b);
 
