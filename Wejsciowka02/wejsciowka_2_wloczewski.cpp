@@ -169,13 +169,13 @@ int main() {
 	for (int i = 0; i < DLUGOSC_SLOWA; i++) {
 		for (int j = 0; j < N; j++) {
 			for (int k = 0; k < M; k++) {
-				if (slowo[i] == a[j][k]) b[i] = &a[j][k];
+				if (slowo[i] == a[j][k]) b[i] = &a[j][k]; // zapamietanie wskaznikow do poszczegolnych liter slowa
 			}
 		}
 	}
 
 	printf("Podane slowo: ");
-	WypiszWartosciWskaznikow(b);
+	WypiszWartosciWskaznikow(b); 
 	PrzemiescRzedy(a, LICZBA_SZYFRUJACA);
 	printf("Zakodowane slowo to: ");
 	WypiszWartosciWskaznikow(b);
