@@ -190,5 +190,7 @@ int main() {
 	delete[] a; // dealokacja tablicy dwuwymiarowe
 	delete[] b; // dealokacja tablicy ze wskaznikami
 	delete[] slowo; // dealokacja tablicy z charami
+	printf("Koniec programu.\n\n");
+
 	return 0;
 }
