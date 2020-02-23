@@ -3,7 +3,7 @@
 
 #define N 5 // wysokosc macierzy
 #define M 5 // szerokosc macierzy
-#define DLUGOSC_SLOWA 10 // dlugosc wczytywanego slowa
+#define DLUGOSC_SLOWA 5 // dlugosc wczytywanego slowa
 #define DLUGOSC_ALFABETU 25
 
 void CzyszczenieBufora() {
@@ -51,6 +51,7 @@ void WypiszTablice(char** tab) {
 		}
 		putchar('\n');
 	}
+	putchar('\n');
 }
 
 /*
@@ -97,31 +98,31 @@ void WypiszWartosciWskaznikow(char** tab) {
 
 /*
 @ brief		Funkcja do przesuniecia rzedow w tablicy dwuwymiarowej 
-			o podana liczbe w dol.
+			o podana liczbe w gore.
 @ param		**tab
 			Wskaznik do tablicy wskaznikow, czyli do tabeli na ktorej
 			wykonamy operacje.
 @ param		przesuniecie
 			Liczba calkowita z przedzialu [-N, N] ktora informuje nas 
-			o ile rzedow chcemy przemiescic kazdy istniejacy rzad W DOL.
-			W przypadku liczby ujemnej, przemieszczenie nastepuje W GORE.
+			o ile rzedow chcemy przemiescic kazdy istniejacy rzad W GORE.
+			W przypadku liczby ujemnej, przemieszczenie nastepuje W DOL.
 */
 void PrzemiescRzedy(char** tab, int przesuniecie) {
 	// a.: zminimalizowanie przemieszczenia b.: zamiana na liczbe dodatnia
 	przesuniecie = (przesuniecie % N) + N; 
 	if (przesuniecie == 0) return; // takie przesuniecia doprowadza do punktu wyjsica
 	
-	char ostatniRzad[M];
-	for (int i = 0; i < M; i++) {
-		ostatniRzad[i] = tab[N - 1][i];
-	}
-	for (int i = N - 1; i > 0; i--) {
+	char kopia[N][M];
+	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < M; j++) {
-			tab[i][j] = tab[(i + przesuniecie) % N][j];
+			kopia[i][j] = tab[i][j];
 		}
 	}
-	for (int i = 0; i < M; i++) {
-		tab[0][i] = ostatniRzad[i];
+
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			tab[i][j] = kopia[(i + przesuniecie) % N][j];
+		}
 	}
 }
 
@@ -154,9 +155,12 @@ int main() {
 
 	printf("Podane slowo: ");
 	WypiszWartosciWskaznikow(b);
-
-	PrzemiescRzedy(a, 1);
-	WypiszTablice(a);
+	PrzemiescRzedy(a, 2);
+	printf("Zakodowane slowo to: ");
+	WypiszWartosciWskaznikow(b);
+	PrzemiescRzedy(a, -2);
+	printf("Rozkodowane slowo to: ");
+	WypiszWartosciWskaznikow(b);
 
 	for (int i = 0; i < N; i++) { // dealokacja rzedow w tablicy dwuwymiarowej
 		delete[] a[i];
@@ -167,5 +171,3 @@ int main() {
 	delete[] slowo; // dealokacja tablicy z charami
 	return 0;
 }
-
-// TODO naprawic przemieszczanie rzedow
