@@ -6,6 +6,7 @@
 #define DLUGOSC_SLOWA 5 // dlugosc wczytywanego slowa
 #define DLUGOSC_ALFABETU 25
 #define LICZBA_SZYFRUJACA 3 // ile rzedow zostanie przesunietych w gore, podczas przesuwania zawartosci tablicy
+#define _CRT_SECURE_NO_WARNINGS
 
 /*
 @ brief		Funkcja do czyszczenia zawartosci bufora.
@@ -80,11 +81,23 @@ void WypiszTablice(char** tab) {
 @ param		*tab
 			Wskaznik do tablicy, ktora ma przechowac slowo.
 */
-void WczytajSlowo(char* tab) {
+int WczytajSlowo(char* tab) {
+	//scanf("%s", tab);
+	int znaki = 0;
 	for (int i = 0; i < DLUGOSC_SLOWA; i++) {
-		tab[i] = getchar();
+		char znak = getchar();
+		if (znak != '\n') {
+			tab[i] = znak;
+			znaki++;
+		}
+		else {
+			break;
+		}
 	}
-	CzyszczenieBufora(); // po wczytaniu 10 znakow w buforze pozostaje enter, ktory trzeba usunac, zeby poprawnie wczytywac dalsze dane
+	if (znaki == DLUGOSC_SLOWA) {
+		CzyszczenieBufora();
+	}
+	return znaki;
 }
 
 /*
@@ -109,7 +122,7 @@ void WypiszSlowo(char* tab) {
 */
 void WypiszWartosciWskaznikow(char** tab) {
 	for (int i = 0; i < DLUGOSC_SLOWA; i++) {
-		printf("%c", *tab[i]);
+		if (tab[i] != NULL) printf("%c", *tab[i]);
 	}
 	putchar('\n');
 }
@@ -164,9 +177,9 @@ int main() {
 	WypiszTablice(a);
 
 	printf("Podaj slowo o dokldnej dlugosci %d znakow. Znaki musza zawierac sie w powyzszej tablicy: ", DLUGOSC_SLOWA);
-	WczytajSlowo(slowo);
+	int iloscPodanychZnakow = WczytajSlowo(slowo);
 
-	for (int i = 0; i < DLUGOSC_SLOWA; i++) {
+	for (int i = 0; i < iloscPodanychZnakow; i++) {
 		for (int j = 0; j < N; j++) {
 			for (int k = 0; k < M; k++) {
 				if (slowo[i] == a[j][k]) b[i] = &a[j][k]; // zapamietanie wskaznikow do poszczegolnych liter slowa
