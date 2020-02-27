@@ -103,20 +103,6 @@ int WczytajSlowo(char* tab) {
 }
 
 /*
-@ brief		Funkcja do wypisania slowa.
-			Wiemy, ze podane przez uzytkownika slowo jest
-			ustalonej dlugosci, ktora jest przechowywana w stalej.
-@ param		*tab
-			Wskaznik do tablicy przechowuj¹cej kolejne znaki.
-*/
-void WypiszSlowo(char* tab) {
-	for (int i = 0; i < DLUGOSC_SLOWA; i++) {
-		printf("%c", tab[i]);
-	}
-	putchar('\n');
-}
-
-/*
 @ brief		Funkcja do wypisania wartosci na jakie wskazuje tablica B
 @ param		**tab
 			Wskaznik do tablicy wskaznikow, ktorych wartosci wypiszemy na ekran,
