@@ -80,6 +80,8 @@ void WypiszTablice(char** tab) {
 			podczas wpisywania.
 @ param		*tab
 			Wskaznik do tablicy, ktora ma przechowac slowo.
+@ return	znaki
+			Ilosc znakow podanych przez uzytkownika.
 */
 int WczytajSlowo(char* tab) {
 	//scanf("%s", tab);
