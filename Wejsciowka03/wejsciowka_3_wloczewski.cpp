@@ -102,9 +102,9 @@ void NadajKolekcjiWartosciPoczatkowe(struct struktura* wsk) {
 void WypiszKolekcje(struct struktura* wsk) {
 	printf("Wypisuje kolekcje, czyli tablice struktur: \n");
 	for (int i = 0; i < ILOSC_STRUKTUR; i++) {
-		printf("struktura " ANSI_ZIELONY "nr. %d " ANSI_BIALY ": ", i + 1);
-		printf("liczba: " ANSI_ROZOWY "%d\t" ANSI_BIALY, wsk[i].liczba);
-		printf("slowo:" ANSI_NIEBIESKI "%s\n" ANSI_BIALY, wsk[i].slowo);
+		printf("struktura " ANSI_ZIELONY "nr.%d" ANSI_BIALY ": ", i + 1);
+		printf("liczba:" ANSI_ROZOWY "%2d " ANSI_BIALY, wsk[i].liczba);
+		printf("slowo: " ANSI_NIEBIESKI "%s\n" ANSI_BIALY, wsk[i].slowo);
 	}
 	putchar('\n');
 }
