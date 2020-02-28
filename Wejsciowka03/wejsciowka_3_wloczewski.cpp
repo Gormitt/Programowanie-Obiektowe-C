@@ -153,19 +153,19 @@ void WpiszDaneDoKolekcji(struct struktura* wsk) {
 
 
 int main() {
-	srand(time(NULL));
-	struct struktura kolekcja[ILOSC_STRUKTUR];
+	srand(time(NULL)); // ustawienie ziarna losowania
+	struct struktura kolekcja[ILOSC_STRUKTUR]; // zadeklarowanie tablicy struktur
 
-	Info();
+	Info(); // wypisanie info o programie
 	printf("Wygenerowano poczatkowe wartosci %d kolekcji.\n", ILOSC_STRUKTUR);
-	NadajKolekcjiWartosciPoczatkowe(kolekcja);
-	WypiszKolekcje(kolekcja);
+	NadajKolekcjiWartosciPoczatkowe(kolekcja); // nadanie kolekcji poczatkowych wartosci
+	WypiszKolekcje(kolekcja); // wypisanie kolekcji z nadanymi wartosciami
 	
-	WpiszDaneDoKolekcji(kolekcja);
+	WpiszDaneDoKolekcji(kolekcja); // wczytanie od uzytkownika nowych danych do kolekcji
 
-	int liczbaSkroconychNapisow = SkrocNapisyWKolekcji(kolekcja);
-	printf("Program wykonal %d skrocen slow w kolekcjach.\n", liczbaSkroconychNapisow);	
-	WypiszKolekcje(kolekcja);
+	int liczbaSkroconychNapisow = SkrocNapisyWKolekcji(kolekcja); // skrocenie napisow, tak jak prosza w zadaniu 
+	printf("Program wykonal %d skrocen slow w kolekcjach.\n", liczbaSkroconychNapisow);	// wypisanie ilosci skrocen
+	WypiszKolekcje(kolekcja); // wypisanie kolekcji
 
 	printf("Koniec programu.\n\n");
 	return 0;
