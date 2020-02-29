@@ -157,7 +157,7 @@ int main() {
 	struct struktura kolekcja[ILOSC_STRUKTUR]; // zadeklarowanie tablicy struktur
 
 	Info(); // wypisanie info o programie
-	printf("Wygenerowano poczatkowe wartosci %d kolekcji.\n", ILOSC_STRUKTUR);
+	printf("Wygenerowano poczatkowe wartosci %d struktur.\n", ILOSC_STRUKTUR);
 	NadajKolekcjiWartosciPoczatkowe(kolekcja); // nadanie kolekcji poczatkowych wartosci
 	WypiszKolekcje(kolekcja); // wypisanie kolekcji z nadanymi wartosciami
 	
