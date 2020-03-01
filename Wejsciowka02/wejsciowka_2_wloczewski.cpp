@@ -3,7 +3,7 @@
 
 #define N 5 // wysokosc macierzy
 #define M 5 // szerokosc macierzy
-#define DLUGOSC_SLOWA 5 // dlugosc wczytywanego slowa
+#define DLUGOSC_SLOWA 20 // dlugosc wczytywanego slowa
 #define DLUGOSC_ALFABETU 25
 #define LICZBA_SZYFRUJACA 3 // ile rzedow zostanie przesunietych w gore, podczas przesuwania zawartosci tablicy
 #define _CRT_SECURE_NO_WARNINGS
@@ -84,7 +84,16 @@ void WypiszTablice(char** tab) {
 			Ilosc znakow podanych przez uzytkownika.
 */
 int WczytajSlowo(char* tab) {
-	//scanf("%s", tab);
+	char slowo[DLUGOSC_SLOWA];
+	while (scanf_s("%s", slowo, (unsigned)_countof(slowo)) != 1 || getchar() != '\n') {
+		printf("ERROR - blad podczas wczytywania slowa, prosze sprobuj ponownie: ");
+		CzyszczenieBufora();
+	}
+	for (int i = 0; i < DLUGOSC_SLOWA; i++) {
+		if (slowo[i] == '\0') return i + 1;
+		tab[i] = slowo[i];
+	}
+	/*
 	int znaki = 0;
 	for (int i = 0; i < DLUGOSC_SLOWA; i++) {
 		char znak = getchar();
@@ -99,7 +108,8 @@ int WczytajSlowo(char* tab) {
 	if (znaki == DLUGOSC_SLOWA) {
 		CzyszczenieBufora();
 	}
-	return znaki;
+	*/
+	return DLUGOSC_SLOWA;
 }
 
 /*
