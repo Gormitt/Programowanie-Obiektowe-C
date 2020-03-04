@@ -1,7 +1,7 @@
 #include <iostream>
 #include <math.h>
 
-#define LICZBA_TROJKATOW 2
+#define LICZBA_TROJKATOW 3
 
 struct WynikiAnalizy {
 	char czyIstniejeTrojkat;
@@ -33,9 +33,8 @@ WynikiAnalizy AnalizaZestawienia(double (*trojkaty)[3], int n) {
 }
 
 int main() {
-	struct WynikiAnalizy w1;
-	double trojkaty[LICZBA_TROJKATOW][3] { {3.0, 4.0, 5.0}, {3.0, 4.0, 8.0} };
-	w1 = AnalizaZestawienia(trojkaty, LICZBA_TROJKATOW);
+	double trojkaty[LICZBA_TROJKATOW][3]{ {3.0, 4.0, 5.0}, {3.0, 4.0, 8.0}, {2.0, 3.0, 4.0} };
+	struct WynikiAnalizy w1 = AnalizaZestawienia(trojkaty, LICZBA_TROJKATOW);
 
 	printf("czy istnieje chociaz jeden trojkat: %c\nnumer najmniejszego trojkata: %d\npole: %lf\n\n", w1.czyIstniejeTrojkat, w1.numerNajmniejszej, w1.poleNajmniejszej);
 	return 0;
