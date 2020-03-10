@@ -5,9 +5,11 @@
 #define DL_NAP 20
 #define DL_TAB 5
 
+#define ERROR_DLUGOSC_SLOWA printf("error - podane slowo jest za dlugo, prosze spbouj ponownie: ");
+
 struct Para {
 	char napis[DL_NAP];
-	char liczba[DL_NAP];
+	int liczba;
 };
 
 /*
@@ -21,14 +23,43 @@ void Info() {
 }
 
 /*
+@ brief Funkcja do czyszczenia bufora.
+*/
+void CzyszczenieBufora() {
+	while (getchar() != '\n') {}
+}
+
+/*
+@ brief Funkcja do zainicjowania tablicy struktur
+@ param *p - wskaznik do tablicy struktur
+*/
+void ZainicujKolekcje(struct Para* p) {
+	for (int i = 0; i < DL_TAB; i++) {
+		p[i].liczba = i;
+		strcpy_s(p[i].napis, "napis");
+	}
+}
+
+/*
+@ brief Funkcja do wczytania slowa
+@ param *s - wskaznik do tablicy przechowujacej slowo
+*/
+void WczytajSlowo(char* s) {
+	while (scanf_s("%s", s, DL_NAP) != 1 || getchar() != '\n') {
+		CzyszczenieBufora();
+		ERROR_DLUGOSC_SLOWA
+	}
+}
+
+/*
 @ brief Funkcja do oczytania jednego wiersza z pliku.
 @ param *f - wskaznik do otwartego pliku
 @ param *p - wskaznik do tablicy par [para to struktura]
 @ ret   0 - w przypadku niepoprawnego wczytania jednego wiersza
         1 - w przypadku poprawnego wczytania jednego wiersza
 */
-int Wiersz(FILE* f, Para* p) {
-	char napis[DL_NAP];
+int Wiersz(FILE* f, struct Para* p) {
+	char napis[DL_NAP] = { '\0' };
 	for (int i = 0; i < 3; i++) {
 		fscanf_s(f, "%s", napis, DL_NAP);
 		
@@ -36,41 +67,51 @@ int Wiersz(FILE* f, Para* p) {
 			return 0;
 		}
 		else {
-			printf("%s\t", napis);
+			// printf("%s\t", napis);
+			if (i == 1) {
+				//printf("nazwisko to: %s\t", napis);
+				strcpy_s(p->napis, napis);
+			}
+			else if (i == 2) {
+				//printf("ocena to: %d", atoi(napis));
+				p->liczba = atoi(napis);
+			}
 		}
 	}
-	printf("\n");
+	//printf("\n");
 	return 1;
 }
 
-void Test1(Para *p) {
-	*p->liczba = 5;
-	strcpy_s(p->napis, "test");
-}
-void Test2(Para* p) {
-	printf("%d\t%s\n", *p->liczba, p->napis);
-}
+int main() {
+	Info();
 
-
-int main() {	
 	FILE* plik;
-	Para dane [DL_TAB];
-	char napis[DL_NAP];
+	char nazwaWejscia[DL_NAP];
+	char nazwaWyjscia[DL_NAP];
+	struct Para dane[DL_TAB];
+	
+	ZainicujKolekcje(dane);
 
-	for (int i = 0; i < DL_TAB; i++) {
-		Test1(&dane[i]);
-		Test2(&dane[i]);
-	}
+	printf("podaj nazwe pliku wejsciowego: ");
+	WczytajSlowo(nazwaWejscia);
+	printf("podaj nazwe pliku wyjsciowego: ");
+	WczytajSlowo(nazwaWyjscia);
 	printf("\n\n");
-
-	if (fopen_s(&plik, "plik_wejscie.txt", "r") == 0 && plik != NULL) {
+	
+	int indeks = 0, liczbaLinii = 0;
+	if (fopen_s(&plik, nazwaWejscia, "r") == 0 && plik != NULL) {
 		while (!feof(plik)) {
-			Wiersz(plik, dane);
+			liczbaLinii += Wiersz(plik, &dane[indeks]);
+			indeks++;
 		}
 		fclose(plik);
 	}
 	else {
 		printf("error - nie udalo sie otworzyc podanego pliku\n");
+	}
+
+	for (int i = 0; i < liczbaLinii; i++) {
+		printf("nazwisko: %s\tocena: %d\n", dane[i].napis, dane[i].liczba);
 	}
 
 	return 0;
