@@ -2,14 +2,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DLUGOSC_NAPISU 20
-#define WIELKOSC_TABLICY 5
+#define DL_NAP 20
+#define DL_TAB 5
 
 struct Para {
-	char napis[DLUGOSC_NAPISU];
-	int liczba;
+	char napis[DL_NAP];
+	char liczba[DL_NAP];
 };
 
+/*
+@ brief Funkcja do wypisania info o programie i autorze
+*/
 void Info() {
 	printf("autor: \tMateusz Wloczewski\n");
 	printf("data: \t8 mar 2020\n");
@@ -24,28 +27,50 @@ void Info() {
 @ ret   0 - w przypadku niepoprawnego wczytania jednego wiersza
         1 - w przypadku poprawnego wczytania jednego wiersza
 */
-int Wiersz(FILE* f, struct para* p) {
+int Wiersz(FILE* f, Para* p) {
+	char napis[DL_NAP];
+	for (int i = 0; i < 3; i++) {
+		fscanf_s(f, "%s", napis, DL_NAP);
+		
+		if (feof(f) && i < 1) {
+			return 0;
+		}
+		else {
+			printf("%s\t", napis);
+		}
+	}
+	printf("\n");
 	return 1;
 }
 
+void Test1(Para *p) {
+	*p->liczba = 5;
+	strcpy_s(p->napis, "test");
+}
+void Test2(Para* p) {
+	printf("%d\t%s\n", *p->liczba, p->napis);
+}
+
+
 int main() {	
-	char buf[DLUGOSC_NAPISU];
-	FILE* stream;
-	errno_t err = fopen_s(&stream, "plik_wejscie.txt", "r");
-	/*
-	if (err != 0) {
-		printf("error - can't open plik_wejscie.txt\n");
+	FILE* plik;
+	Para dane [DL_TAB];
+	char napis[DL_NAP];
+
+	for (int i = 0; i < DL_TAB; i++) {
+		Test1(&dane[i]);
+		Test2(&dane[i]);
+	}
+	printf("\n\n");
+
+	if (fopen_s(&plik, "plik_wejscie.txt", "r") == 0 && plik != NULL) {
+		while (!feof(plik)) {
+			Wiersz(plik, dane);
+		}
+		fclose(plik);
 	}
 	else {
-		printf("file plikl_wejscie.txt was opened succesfuly\n");
-	}
-	*/
-	if (stream != NULL) {
-		while (!feof(stream)) {
-			fscanf_s(stream, "%s", buf, DLUGOSC_NAPISU);
-			printf("pobrana linia: %s\n", buf);
-		}
-		fclose(stream);
+		printf("error - nie udalo sie otworzyc podanego pliku\n");
 	}
 
 	return 0;
