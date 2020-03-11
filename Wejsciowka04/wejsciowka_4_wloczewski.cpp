@@ -57,6 +57,7 @@ void WczytajSlowo(char* s) {
 @ param *p - wskaznik do tablicy par [para to struktura]
 @ ret   0 - w przypadku niepoprawnego wczytania jednego wiersza
         1 - w przypadku poprawnego wczytania jednego wiersza
+		! POPRAWNE = wiersz zawiera po kolei 3 dane: pesel, nazwisko, ocena
 */
 int Wiersz(FILE* f, struct Para* p) {
 	char napis[DL_NAP] = { '\0' };
@@ -113,19 +114,19 @@ int main() {
 	if (fopen_s(&plikWejscie, nazwaWejscia, "r" ) == 0 && plikWejscie != NULL && 
 		fopen_s(&plikWyjscie, nazwaWyjscia, "a+") == 0 && plikWyjscie != NULL) { // przypadek gdy poprawnie udalo sie otworzyc oba pliki
 
-		statusOtwarcia = 1;
+		statusOtwarcia = 1; // cel: w przypadku braku poprawnego otwarcia nie dostaniemy bledu o pustym pliku
 		while (!feof(plikWejscie)) {
-			int aktualnyStatus = Wiersz(plikWejscie, &dane[indeks]);
-			if (aktualnyStatus) {
+			int aktualnyStatus = Wiersz(plikWejscie, &dane[indeks]); // wyciagamy z pliku nazwisko oraz ocene, wpisujemy dane do odpowiedniej komorki [indeks]
+			if (aktualnyStatus) { // cel: w przypadku gdy linia zostala pobrana niepoprawnie (ma za malo danych, albo jest pusta) nie podejmujemy sie dalszych krokow
 				char zakodowanyNapis[DL_NAP];
 				int tmp = 0;
-				while (dane[indeks].napis[tmp] != '\0') {
+				while (dane[indeks].napis[tmp] != '\0') { // litera po literze zakodowujemy nazwisko studenta
 					if (CzySamogloska(dane[indeks].napis[tmp])) zakodowanyNapis[tmp] = '*';
 					else zakodowanyNapis[tmp] = dane[indeks].napis[tmp];
 					tmp++;
 				}
 				zakodowanyNapis[tmp] = '\0';
-				fprintf(plikWyjscie, "%s %d\n", zakodowanyNapis, dane[indeks].liczba);
+				fprintf(plikWyjscie, "%s %d\n", zakodowanyNapis, dane[indeks].liczba); // wpisujemy zakodowane nazwisko i ocene do pliku
 			}
 			liczbaLinii += aktualnyStatus;
 			indeks++;
