@@ -109,10 +109,11 @@ int main() {
 	WczytajSlowo(nazwaWyjscia);
 	printf("\n\n");
 	
-	int indeks = 0, liczbaLinii = 0;
+	int indeks = 0, liczbaLinii = 0, statusOtwarcia = 0;
 	if (fopen_s(&plikWejscie, nazwaWejscia, "r" ) == 0 && plikWejscie != NULL && 
-		fopen_s(&plikWyjscie, nazwaWyjscia, "a+") == 0 && plikWyjscie != NULL) {
+		fopen_s(&plikWyjscie, nazwaWyjscia, "a+") == 0 && plikWyjscie != NULL) { // przypadek gdy poprawnie udalo sie otworzyc oba pliki
 
+		statusOtwarcia = 1;
 		while (!feof(plikWejscie)) {
 			int aktualnyStatus = Wiersz(plikWejscie, &dane[indeks]);
 			if (aktualnyStatus) {
@@ -129,17 +130,29 @@ int main() {
 			liczbaLinii += aktualnyStatus;
 			indeks++;
 		}
+		
+		if (liczbaLinii == 0) fprintf(plikWyjscie, "error - plik z danymi wejsciowymi jest pusty\n");
 		fclose(plikWejscie);
 		fclose(plikWyjscie);
 	}
-	else {
+	else { 
 		printf("error - nie udalo sie otworzyc jednego z podanych plikow\n");
 	}
 
-	
-	for (int i = 0; i < liczbaLinii; i++) {
-		printf("nazwisko: %s\tocena: %d\n", dane[i].napis, dane[i].liczba);
+	/*
+	0 - przypadek gdy plik wejsciowy nie zawiera danych: komunikat o bledzie
+	1 - gdy plik zawiera dane, wyswietl wyciagniete z niego informacje
+	*/
+	if (liczbaLinii == 0 && statusOtwarcia) {
+		printf("error - plik z danymi wejsciowymi jest pusty\n");
 	}
+	else if (statusOtwarcia){
+		printf("dane pobrane z pliku wejsciowego: \n");
+		for (int i = 0; i < liczbaLinii; i++) {
+			printf("nazwisko: %s\tocena: %d\n", dane[i].napis, dane[i].liczba);
+		}
+	}
+	
 	
 
 	return 0;
