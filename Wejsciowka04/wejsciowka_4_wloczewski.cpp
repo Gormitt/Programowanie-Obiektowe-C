@@ -117,7 +117,14 @@ int main() {
 			int aktualnyStatus = Wiersz(plikWejscie, &dane[indeks]);
 			if (aktualnyStatus) {
 				char zakodowanyNapis[DL_NAP];
-				fprintf(plikWyjscie, "%s %d\n", dane[indeks].napis, dane[indeks].liczba);
+				int tmp = 0;
+				while (dane[indeks].napis[tmp] != '\0') {
+					if (CzySamogloska(dane[indeks].napis[tmp])) zakodowanyNapis[tmp] = '*';
+					else zakodowanyNapis[tmp] = dane[indeks].napis[tmp];
+					tmp++;
+				}
+				zakodowanyNapis[tmp] = '\0';
+				fprintf(plikWyjscie, "%s %d\n", zakodowanyNapis, dane[indeks].liczba);
 			}
 			liczbaLinii += aktualnyStatus;
 			indeks++;
