@@ -82,15 +82,26 @@ int Wiersz(FILE* f, struct Para* p) {
 	return 1;
 }
 
-int main() {
-	Info();
+/*
+@ brief Funkcja sprawdza czy dany znak to samogloska.
+@ param c - sprawdzany znak
+@ ret   0 - jezeli podany znak to NIE samogloska
+@ ret   1 - jezeli podany to JEST samogloska
+*/
+int CzySamogloska(char c) {
+	if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' || c == 'y') return 1;
+	else return 0;
+}
 
-	FILE* plik;
-	char nazwaWejscia[DL_NAP];
-	char nazwaWyjscia[DL_NAP];
-	struct Para dane[DL_TAB];
+int main() {
+	Info(); // wyswietlenie info o programie
+
+	FILE* plikWejscie, *plikWyjscie;
+	char nazwaWejscia[DL_NAP]; // miejsce na nazwe pliku wejsciowego
+	char nazwaWyjscia[DL_NAP]; // miejsca na nazwe pliku wyjsciowego
+	struct Para dane[DL_TAB]; // tablica struktur, kazda struktura przechowuje nazwisko i ocene studenta
 	
-	ZainicujKolekcje(dane);
+	ZainicujKolekcje(dane); // wpisanie do tablicy struktur poczatkowych wartosci
 
 	printf("podaj nazwe pliku wejsciowego: ");
 	WczytajSlowo(nazwaWejscia);
@@ -99,20 +110,30 @@ int main() {
 	printf("\n\n");
 	
 	int indeks = 0, liczbaLinii = 0;
-	if (fopen_s(&plik, nazwaWejscia, "r") == 0 && plik != NULL) {
-		while (!feof(plik)) {
-			liczbaLinii += Wiersz(plik, &dane[indeks]);
+	if (fopen_s(&plikWejscie, nazwaWejscia, "r" ) == 0 && plikWejscie != NULL && 
+		fopen_s(&plikWyjscie, nazwaWyjscia, "a+") == 0 && plikWyjscie != NULL) {
+
+		while (!feof(plikWejscie)) {
+			int aktualnyStatus = Wiersz(plikWejscie, &dane[indeks]);
+			if (aktualnyStatus) {
+				char zakodowanyNapis[DL_NAP];
+				fprintf(plikWyjscie, "%s %d\n", dane[indeks].napis, dane[indeks].liczba);
+			}
+			liczbaLinii += aktualnyStatus;
 			indeks++;
 		}
-		fclose(plik);
+		fclose(plikWejscie);
+		fclose(plikWyjscie);
 	}
 	else {
-		printf("error - nie udalo sie otworzyc podanego pliku\n");
+		printf("error - nie udalo sie otworzyc jednego z podanych plikow\n");
 	}
 
+	
 	for (int i = 0; i < liczbaLinii; i++) {
 		printf("nazwisko: %s\tocena: %d\n", dane[i].napis, dane[i].liczba);
 	}
+	
 
 	return 0;
 }

@@ -1,0 +1,4 @@
+0024 Fichtencholtz 5
+0012 Kowalski 4
+0041 Piknik 3
+0012 Mroczek 4
