@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="wejsciowka_5_wloczewski.cpp">
+    <ClCompile Include="wejsciowka_5_wloczewski.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
