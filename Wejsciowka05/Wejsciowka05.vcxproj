@@ -21,6 +21,9 @@
   <ItemGroup>
     <ClCompile Include="wejsciowka_5_wloczewski.c" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="in.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{88A9F78A-FEB3-4F61-8864-FD7FA680CF3F}</ProjectGuid>

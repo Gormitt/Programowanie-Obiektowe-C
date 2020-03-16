@@ -4,6 +4,7 @@
 #define ERROR_LICZBA printf("error - blad podczas wczytywania liczby, prosze sprobuj ponownie: ");
 #define ERROR_NAPIS printf("error - blad podczas wczytywania napisu, prosze sprobuj ponownie: ");
 #define ERROR_ZAKRES printf("error - podana liczba jest spoza zakresu, prosze sprobuj ponownie: ");
+#define ERROR_PLIK printf("error - nie udalo sie otworzyc pliku o podanej nazwie");
 
 /*
 @ brief Funkcja do wypisania informacji o programie i autorze
@@ -71,12 +72,26 @@ void Bin2Int(char* bin, int* dec) {
 	}
 }
 
+
+
 int main() {
 	Info();
 
+	FILE* in;
+	int n = 0;
+	int m = 0;
 	char nazwaIn[DL_SLOWA];
+	
 	WczytajSlowo("podaj nazwe pliku wejsciowego, ktory ma liczby binarne", nazwaIn);
+	if (fopen_s(&in, nazwaIn, "r") == 0 && in != NULL) {
+		printf("poprawnie otworzono plik o nazwie %s\n\n", nazwaIn);
+		printf("zawartosc: ");
 
+		fclose(in);
+	}
+	else {
+		ERROR_PLIK
+	}
 
 	return 0;
 }
