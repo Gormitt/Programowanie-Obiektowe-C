@@ -1,6 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define DL_SLOWA 20
+#define ROZMIAR_TAB 10
+#define ERROR_ALOKACJA printf("error - blad podczas alokacji tablicy");
 #define ERROR_LICZBA printf("error - blad podczas wczytywania liczby, prosze sprobuj ponownie: ");
 #define ERROR_NAPIS printf("error - blad podczas wczytywania napisu, prosze sprobuj ponownie: ");
 #define ERROR_ZAKRES printf("error - podana liczba jest spoza zakresu, prosze sprobuj ponownie: ");
@@ -63,15 +67,71 @@ void WczytajSlowo(const char* info, char* s) {
 @ brief Funkcja do konwersji liczby binarner na decymalna, bez znajomosci dlugosci
 		Funkcja nie zna dlugosci liczby, dlatego korzysta z postaci iloczynowej.
 @ param *bin - wskaznik do tablicy binarner
-@ param *dec - wskaznik to zmiennej, ktora przechowa wartosc tej liczby
+@ ret   dec - wartosc liczby binarnej bin
 */
-void Bin2Int(char* bin, int* dec) {
+int Bin2Int(char* bin) {
+	int dec = 0;
 	for (int i = 0; bin[i] != '\0'; i++) {
-		*dec *= 2;
-		*dec += (int)(bin[i] - '0');
+		dec *= 2;
+		dec += (int)(bin[i] - '0');
 	}
+	return dec;
 }
 
+/*
+@ brief Funkcja do zaalokowania macierzy na chary
+@ param n - liczba wierszy
+@ param m - liczba rzedow
+@ ret   **tab - wskaznik do nowa zaalokowanej tablicy
+*/
+char** ZaalokujTablice(int n, int m) {
+	char** tab = (char*)calloc(sizeof(char*), n);
+	if (tab != NULL) {
+		tab[0] = (char*)calloc(sizeof(char), n * m);
+		for (int i = 1; i < n; i++) {
+			tab[i] = tab[0] + m * i;
+			// tab[i] wskazuje na i-ty gragment pamieci, zatem sortowanie
+			// bedzie polegalo na przestawiania i-tch wskaznikow do innych miejsc
+			// tak, aby kolejne tab[0] tab[1] ... wskazywaly posortowane wartosci
+		}
+	}
+	else {
+		ERROR_ALOKACJA
+	}
+	return tab;
+}
+
+/*
+@ brief Funkcja do wczytania zawartosci pliku do przygotowanej tablicy
+        Program zaklada, ze kazda liczba w pliku zaczyna sie od 1 oraz
+        ze po sobie nie moga wystepowac identyczne liczby binarne.
+@ param *in - wskaznik do otwartego pliku
+@ param **tab - wskaznik do tablicy dwuwymiarowej (do przechowania liczb binarnych)
+@ ret   indeks - liczba wczytanych liczb binarnych
+*/
+int WczytajPlik(FILE* in, char** tab) {
+	int indeks = 0;
+	char linia[DL_SLOWA];
+	while (!feof(in)) {
+		fscanf_s(in, "%s", linia, DL_SLOWA);
+		
+		if (linia[0] != '1') { 
+			printf("error - plik jest pusty\n");
+			return;
+		}
+		else {
+			if (indeks > 0 && strcmp(tab[indeks - 1], linia) == 0) {
+				return indeks;
+			}
+			else {
+				printf("ind: %s\t%d\n", linia, Bin2Int(linia));
+				strcpy_s(tab[indeks], 10, linia);
+				indeks++;
+			}
+		}
+	}
+	return indeks;
+}
 
 
 int main() {
@@ -85,8 +145,18 @@ int main() {
 	WczytajSlowo("podaj nazwe pliku wejsciowego, ktory ma liczby binarne", nazwaIn);
 	if (fopen_s(&in, nazwaIn, "r") == 0 && in != NULL) {
 		printf("poprawnie otworzono plik o nazwie %s\n\n", nazwaIn);
-		printf("zawartosc: ");
+		
+		WczytajLiczbe("podaj wysokosc tablicy [tyle liczb binarnych zmiesci sie w tab]", &n, 1, ROZMIAR_TAB);
+		WczytajLiczbe("podaj szerokosc tablicy [liczba o takiej dlugosci zmiesci sie w tab]", &m, 1, ROZMIAR_TAB);
+		char** tablica = ZaalokujTablice(n, m);
 
+		int liczbaLinii = WczytajPlik(in, tablica);
+		for (int i = 0; i < liczbaLinii; i++) {
+			printf("linia nr. %d: %s\n", i, tablica[i]);
+		}
+
+		free(tablica[0]); 
+		free(tablica);
 		fclose(in);
 	}
 	else {
