@@ -96,10 +96,6 @@ struct kolekcjaPojazdow WczytajPlik(char* nazwaPliku) {
 				tab[i].pojemnoscSilnika = pojemnosc;
 			}
 
-			for (int i = 0; i < liczbaLinii; i++) {
-				//printf("%s %s %d %f\n", tab->marka, tab->model, tab->rokProdukcji, tab->pojemnoscSilnika);
-			}
-
 			return kolekcjaPojazdow {tab, liczbaLinii};
 		}
 		else {

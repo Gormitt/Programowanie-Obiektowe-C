@@ -85,7 +85,7 @@ int Bin2Int(char* bin) {
 @ ret   **tab - wskaznik do nowa zaalokowanej tablicy
 */
 char** ZaalokujTablice(int n, int m) {
-	char** tab = (char*)calloc(sizeof(char*), n);
+	char** tab = (char**)calloc(sizeof(char*), n);
 	if (tab != NULL) {
 		for (int i = 0; i < n; i++) {
 			tab[i] = (char*)calloc(sizeof(char), m);
