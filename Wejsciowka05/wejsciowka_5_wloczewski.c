@@ -128,7 +128,7 @@ int WczytajPlik(FILE* in, char** tab, int m) {
 
 		if (linia[0] != '1') { 
 			printf("error - plik jest pusty\n");
-			return;
+			return 0;
 		}
 		else if (indeks > 0 && strcmp(tab[indeks - 1], linia) == 0) {
 			return indeks;
@@ -198,12 +198,12 @@ int main() {
 		WczytajLiczbe("podaj szerokosc tablicy [liczba o takiej dlugosci zmiesci sie w tab]", &m, 10, ROZMIAR_TAB);
 		char** tablica = ZaalokujTablice(n, m);
 		int liczbaLinii = WczytajPlik(in, tablica, m);
-		int przestawienia = PosortujTablice(tablica, liczbaLinii);
-
-		printf("\npodczas sortowania dokonano %d przestawien\n", przestawienia);
-		printf("posortowana tablica, zawierajaca dane wczytane z pliku:\n");
-		WypiszTablice(tablica, liczbaLinii);
-		
+		if (liczbaLinii > 0) {
+			int przestawienia = PosortujTablice(tablica, liczbaLinii);
+			printf("\npodczas sortowania dokonano %d przestawien\n", przestawienia);
+			printf("posortowana tablica, zawierajaca dane wczytane z pliku:\n");
+			WypiszTablice(tablica, liczbaLinii);
+		}
 		DealokujTablice(tablica, n);
 		fclose(in);
 	}
