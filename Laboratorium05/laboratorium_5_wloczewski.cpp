@@ -79,15 +79,25 @@ struct kolekcjaPojazdow WczytajPlik(char* nazwaPliku) {
 		
 		struct pojazd* tab = (struct pojazd*)malloc(sizeof(struct pojazd) * liczbaLinii);
 		if (tab != NULL) {
+			rewind(in);
 			for (int i = 0; i < liczbaLinii; i++) {
-				strcpy_s(tab->marka, DL_SLOWA, "Toyota");
-				strcpy_s(tab->model, DL_SLOWA, "Carina");
-				tab->rokProdukcji = 1999;
-				tab->pojemnoscSilnika = 5.5;
+				char marka[DL_SLOWA] = { '\0' };
+				char model[DL_SLOWA] = { '\0' };
+				int rokProdukcji;
+				float pojemnosc;
+				fscanf_s(in, "%s", marka, DL_SLOWA);
+				fscanf_s(in, "%s", model, DL_SLOWA);
+				fscanf_s(in, "%d", &rokProdukcji);
+				fscanf_s(in, "%f", &pojemnosc);
+
+				strcpy_s(tab[i].marka, DL_SLOWA, marka);
+				strcpy_s(tab[i].model, DL_SLOWA, model);
+				tab[i].rokProdukcji = rokProdukcji;
+				tab[i].pojemnoscSilnika = pojemnosc;
 			}
 
 			for (int i = 0; i < liczbaLinii; i++) {
-				printf("%s %s %d %f\n", tab->marka, tab->model, tab->rokProdukcji, tab->pojemnoscSilnika);
+				//printf("%s %s %d %f\n", tab->marka, tab->model, tab->rokProdukcji, tab->pojemnoscSilnika);
 			}
 
 			return kolekcjaPojazdow {tab, liczbaLinii};
