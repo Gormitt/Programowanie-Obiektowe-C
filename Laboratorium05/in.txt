@@ -1,0 +1,2 @@
+marka model rok_produkcji pojemnosc
+marka1 model1 rok_produkcji1 pojemnosc1
