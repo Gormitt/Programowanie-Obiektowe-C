@@ -143,9 +143,14 @@ int WczytajPlik(FILE* in, char** tab, int m) {
 }
 
 /*
-
+@ brief Funkcja do posortowania tablicy z liczbami binarnymi malejaco
+        (wzgledem ich wartosci decymalnej)
+@ param **tab - wskaznik do tablicy
+@ param iloscLiczb - ile liczba binarnych jest w tablicy
+@ ret   przestawienia - ilosc przestawien w tablicy
 */
-void PosortujTablice(char** tab, int iloscLiczb) {
+int PosortujTablice(char** tab, int iloscLiczb) {
+	int przestawienia = 0;
 	for (int i = 0; i < iloscLiczb - 1; i++) {
 		int najwNastepnik = 0;
 		int indeks = 0;
@@ -160,10 +165,22 @@ void PosortujTablice(char** tab, int iloscLiczb) {
 			char* wsk = tab[i];
 			tab[i] = tab[indeks];
 			tab[indeks] = wsk;
+			przestawienia++;
 		}
 	}
+	return przestawienia;
 }
 
+/*
+@ brief Funkcja do wypisania tablicy z liczbami binarnymi wraz z wartosciami decynalnymi
+@ param **tab - wskaznik do tablicy
+@ param liczbaLinii - ile liczb zawiera tablica
+*/
+void WypiszTablice(char** tab, int liczbaLinii) {
+	for (int i = 0; i < liczbaLinii; i++) {
+		printf("%10s -> %5d\n", tab[i], Bin2Int(tab[i]));
+	}
+}
 
 int main() {
 	Info();
@@ -180,13 +197,12 @@ int main() {
 		WczytajLiczbe("podaj wysokosc tablicy [tyle liczb binarnych zmiesci sie w tab]", &n, 10, ROZMIAR_TAB);
 		WczytajLiczbe("podaj szerokosc tablicy [liczba o takiej dlugosci zmiesci sie w tab]", &m, 10, ROZMIAR_TAB);
 		char** tablica = ZaalokujTablice(n, m);
-
 		int liczbaLinii = WczytajPlik(in, tablica, m);
-		
-		PosortujTablice(tablica, liczbaLinii);
-		for (int i = 0; i < liczbaLinii; i++) {
-			printf("%s\n", tablica[i]);
-		}
+		int przestawienia = PosortujTablice(tablica, liczbaLinii);
+
+		printf("\npodczas sortowania dokonano %d przestawien\n", przestawienia);
+		printf("posortowana tablica, zawierajaca dane wczytane z pliku:\n");
+		WypiszTablice(tablica, liczbaLinii);
 		
 		DealokujTablice(tablica, n);
 		fclose(in);
