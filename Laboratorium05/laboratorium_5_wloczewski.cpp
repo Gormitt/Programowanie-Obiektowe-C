@@ -25,7 +25,15 @@ void CzyszczeniBufora() {
 	while (getchar() != '\n') {}
 }
 
-void WczytajLiczbe(const char* info, int* wpis, int min, int max) {
+void WczytajSlowo(const char* info, char* slowo) {
+	printf("%s, wczytywanie slowa: ", info);
+	while (scanf_s("%s", slowo, DL_SLOWA) != 1 || getchar() != '\n') {
+		CzyszczeniBufora();
+		ERROR_SLOWO_BLAD
+	}
+}
+
+void WczytajLiczbeCalkowita(const char* info, int* wpis, int min, int max) {
 	int pierwsza = 1;
 	do {
 		if (pierwsza) {
@@ -39,15 +47,24 @@ void WczytajLiczbe(const char* info, int* wpis, int min, int max) {
 			CzyszczeniBufora();
 			ERROR_LICZBA_BLAD
 		}
- 	} while (*wpis < min || *wpis > max);
+	} while (*wpis < min || *wpis > max);
 }
 
-void WczytajSlowo(const char* info, char* slowo) {
-	printf("%s, wczytywanie slowa: ", info);
-	while (scanf_s("%s", slowo, DL_SLOWA) != 1 || getchar() != '\n') {
-		CzyszczeniBufora();
-		ERROR_SLOWO_BLAD
-	}
+void WczytajLiczbeZmiennoprzecinkowa(const char* info, float* wpis, float min, float max) {
+	int pierwsza = 1;
+	do {
+		if (pierwsza) {
+			pierwsza = 0;
+			printf("%s, wczytywanie liczby z przedzialu [%f, %f]: ", info, min, max);
+		}
+		else {
+			ERROR_LICZBA_ZAKRES
+		}
+		while (scanf_s("%f", wpis) != 1 || getchar() != '\n') {
+			CzyszczeniBufora();
+			ERROR_LICZBA_BLAD
+		}
+	} while (*wpis < min || *wpis > max);
 }
 
 int ZliczLinie(FILE* in) {
@@ -73,6 +90,7 @@ struct kolekcjaPojazdow WczytajPlik(char* nazwaPliku) {
 	if (fopen_s(&in, nazwaPliku, "r") == 0 && in != NULL) {
 		int liczbaLinii = ZliczLinie(in);
 		if (liczbaLinii == 0) {
+			printf("info: podany plik nie zawiera zadnych danych.\n");
 			fclose(in);
 			exit(0);
 		}
@@ -110,17 +128,85 @@ struct kolekcjaPojazdow WczytajPlik(char* nazwaPliku) {
 	}
 }
 
+void WypiszKolekcje(kolekcjaPojazdow k) {
+	for (int i = 0; i < k.liczbaElementow; i++) {
+		printf("%s %s %d %.2f\n", k.tab[i].marka, k.tab[i].model, k.tab[i].rokProdukcji, k.tab[i].pojemnoscSilnika);
+	}
+}
+
+void PobierzNoweAuto(struct pojazd* k) {
+	int rok;
+	float pojemnosc;
+	char wpis[DL_SLOWA];
+	WczytajSlowo("podaj marke nowego samochodu", wpis);
+	strcpy_s(k->marka, DL_SLOWA, wpis);
+	WczytajSlowo("podaj model nowego samochodu", wpis);
+	strcpy_s(k->model, DL_SLOWA, wpis);
+	
+	WczytajLiczbeCalkowita("podaj rok nowego samochodu", &rok, 1900, 2020);
+	WczytajLiczbeZmiennoprzecinkowa("podaj pojemnosc silnika nowego samochodu", &pojemnosc, 1.0, 10.0);
+	k->rokProdukcji = rok;
+	k->pojemnoscSilnika = pojemnosc;
+}
+
+struct kolekcjaPojazdow PowiekszKolekcje(kolekcjaPojazdow k) {
+	struct pojazd* tmp = (struct pojazd*)realloc(k.tab, sizeof(struct pojazd) * (k.liczbaElementow + 1));
+	if (tmp == NULL) {
+		printf("info - nie udalo sie powiekszyc tablicy instrukcja realloc, program tworzy tablice od nowa i przywraca dane\n");
+		struct pojazd* nowa = (struct pojazd*)malloc(sizeof(struct pojazd) * (k.liczbaElementow + 1));
+		if (nowa != NULL) {
+			for (int i = 0; i < k.liczbaElementow; i++) {
+				strcpy_s(nowa[i].marka, DL_SLOWA, k.tab[i].marka);
+				strcpy_s(nowa[i].model, DL_SLOWA, k.tab[i].model);
+				nowa[i].rokProdukcji = k.tab[i].rokProdukcji;
+				nowa[i].pojemnoscSilnika = k.tab[i].pojemnoscSilnika;
+			}
+			free(k.tab);
+			PobierzNoweAuto(&nowa[k.liczbaElementow]);
+			return kolekcjaPojazdow{ nowa, k.liczbaElementow + 1 };
+		}
+		else {
+			ERROR_ALOKACJA
+			exit(0);
+		}
+	}
+	else {
+		PobierzNoweAuto(&tmp[k.liczbaElementow]);
+		return kolekcjaPojazdow{ tmp, k.liczbaElementow + 1 };
+	}
+}
+
+void ZapiszKolekcje(struct kolekcjaPojazdow k, char* nazwaOut) {
+	FILE* out;
+	if (fopen_s(&out, nazwaOut, "a+") == 0 && out != NULL) {
+		for (int i = 0; i < k.liczbaElementow; i++) {
+			fprintf(out, "%s %s %d %.2f\n", k.tab[i].marka, k.tab[i].model, k.tab[i].rokProdukcji, k.tab[i].pojemnoscSilnika);
+		}
+	}
+	else {
+		ERROR_ALOKACJA
+		exit(0);
+	}
+}
+
 int main() {
 	FILE* in;
 
 	char nazwaIn[DL_SLOWA];
+	char nazwaOut[DL_SLOWA];
 	WczytajSlowo("podaj nazwe pliku z danymi wejsciowymi", nazwaIn);
+	WczytajSlowo("podaj nazwe pliku na zapisanie danych", nazwaOut);
 	
-	struct kolekcjaPojazdow k = WczytajPlik(nazwaIn);
-	for (int i = 0; i < k.liczbaElementow; i++) {
-		printf("%s %s %d %f\n", k.tab[i].marka, k.tab[i].model, k.tab[i].rokProdukcji, k.tab[i].pojemnoscSilnika);
-	}
+	struct kolekcjaPojazdow kol = WczytajPlik(nazwaIn);
+	printf("\nwczytana z pliku kolekcja samochodow: \n");
+	WypiszKolekcje(kol);
 
-	free(k.tab);
+	kol = PowiekszKolekcje(kol);
+	printf("\nkolekcja powiekszona o jeden pojazd podany wg. specyfikacji uzytkownika: \n");
+	WypiszKolekcje(kol);
+
+	ZapiszKolekcje(kol, nazwaOut);
+
+	free(kol.tab);
 	return 0;
 }
