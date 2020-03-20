@@ -315,7 +315,6 @@ int main() {
 	char nazwaIn[DL_SLOWA];
 	char nazwaOut[DL_SLOWA];
 	WczytajSlowo("podaj nazwe pliku z danymi wejsciowymi", nazwaIn);
-	WczytajSlowo("podaj nazwe pliku na zapisanie danych", nazwaOut);
 	
 	struct zestawienieStudentow zestawienie = WczytajPlik(nazwaIn);
 	printf("\nwczytane z pliku zestawienie studentow: \n");
@@ -325,6 +324,7 @@ int main() {
 	printf("\nzestawienie studentow pomniejszone o jednego studenta: \n");
 	WypiszZestawienie(&zestawienie);
 
+	WczytajSlowo("podaj nazwe pliku na zapisanie danych", nazwaOut);
 	ZapiszKolekcje(&zestawienie, nazwaOut);
 
 	free(zestawienie.tab); // zwolnienie tablicy zaalokowanej do zmiennej zestawienie
