@@ -106,31 +106,61 @@ void WczytajLiczbeZmiennoprzecinkowa(const char* info, double* wpis, double min,
 	} while (*wpis < min || *wpis > max);
 }
 
-// Funkcja nr. 1
-/* 
-@ brief Funkcja do liczenia linii "na pusto".
-@ param *in - wskaznik do otwartego pliku
-@ ret    liczbaLinii - liczba linii w pliku
+/*
+@ brief Funkcja do dealokacji dynamicznej listy jednokierunkowej.
+@ param *lista - wskaznik do glowy list
 */
-int ZliczLinie(FILE* in) {
-	char linia[DL_SLOWA];
-	int liczbaLinii = 0;
-	
-	while (!feof(in)) {
-		for (int i = 0; i < ELEMENTY_LINII; i++) {
-			fscanf_s(in, "%s", linia, DL_SLOWA);
-
-			if (i < 1 && feof(in)) {
-				return liczbaLinii;
-			}
-		}
-		liczbaLinii++;
+void DealokujListe(struct listaJednokierunkowa* lista) {
+	struct listaJednokierunkowa* kolejny;
+	while (lista) {
+		kolejny = lista->kolejny;
+		free(lista);
+		lista = kolejny;
 	}
-	rewind(in);
-	return liczbaLinii;
 }
 
-// Funkcja nr. 2
+/*
+@ brief Funkcja, ktora majac wskaznik do pliku zapisze z niego dane do listy jednokierunkowej.
+        Funkcja wczytuje pojedyncze linie, do momentu gdy feof(in) poinformuje, ze flaga jest zapalona.
+        W trakcie dzialania, funkcja bada czy po wczytaniu pierwszego ciagu (id) zapalana jest flaga,
+        dzieki czemu zabezpiecza sie przed wczytywaniem pustej linii do listy (co by skutkowalo wyswietlaniem smieci z pamieci).
+@ param *in - wskaznik do otwartego pliku
+@ param *liczbaElementow - wskaznik do zmiennej, iterowanej po wczytaniu kazdej poprawnej linii z pliku
+*/
+struct listaJednokierunkowa* DodajDoListy(FILE* in, int* liczbaElementow) {
+	struct listaJednokierunkowa* nowy = (struct listaJednokierunkowa*)malloc(sizeof(struct listaJednokierunkowa));
+	if (nowy != NULL) {
+		nowy->kolejny = NULL;
+
+		int id;
+		char nazwisko[DL_SLOWA] = { '\0' };
+		char imie[DL_SLOWA] = { '\0' };
+		double punkty;
+
+		fscanf_s(in, "%d", &id);
+		if (feof(in)) {
+			return NULL;
+		} // jezeli feof nie zwroci prawdy to linia jest poprawnie skonstruowana
+
+		fscanf_s(in, "%s", nazwisko, DL_SLOWA);
+		fscanf_s(in, "%s", imie, DL_SLOWA);
+		fscanf_s(in, "%lf", &punkty);
+
+		strcpy_s(nowy->st.nazwisko, DL_SLOWA, nazwisko);
+		strcpy_s(nowy->st.imie, DL_SLOWA, imie);
+		nowy->st.id = id;
+		nowy->st.punkty = punkty;
+		nowy->kolejny = NULL;
+		*liczbaElementow += 1;
+	}
+	else {
+		ERROR_ALOKACJA
+		exit(0);
+	}
+	return nowy;
+}
+
+// Funkcja nr. 2 - (przerobiona na potrzeby zadania drugiego, tak aby wczytywala linie do listy jednokierunkowej)
 /*
 @ brief Funkcja do wczytania zawartosci pliku i zapisania jego do struktur.
 @ param *nazwaPliku - wskaznik do tablicy przechowujacej nazwe pliku wejsciowego
@@ -141,31 +171,39 @@ int ZliczLinie(FILE* in) {
 struct zestawienieStudentow WczytajPlik(char* nazwaPliku) {
 	FILE* in;
 	if (fopen_s(&in, nazwaPliku, "r") == 0 && in != NULL) {
-		int liczbaLinii = ZliczLinie(in);
+		int liczbaLinii = 0;
+		struct listaJednokierunkowa* glowa = NULL;
+		struct listaJednokierunkowa* dodany = NULL;
+		while (!feof(in)) {
+			if (glowa == NULL) {
+				glowa = DodajDoListy(in, &liczbaLinii);
+				if (glowa != NULL) {
+					dodany = glowa;
+				}
+			}
+			else {
+				dodany->kolejny = DodajDoListy(in, &liczbaLinii);
+				if (dodany->kolejny != NULL) {
+					dodany = dodany->kolejny;
+				}
+			}
+		}
 		if (liczbaLinii == 0) {
-			printf("info: podany plik nie zawiera zadnych danych.\n");
-			fclose(in);
+			printf("info: plik z danymi jest pusty\n");
 			exit(0);
 		}
 		
 		struct student* tab = (struct student*)malloc(sizeof(struct student) * liczbaLinii);
 		if (tab != NULL) {
-			rewind(in);
+			struct listaJednokierunkowa* tmp = glowa;
 			for (int i = 0; i < liczbaLinii; i++) {
-				int id;
-				char nazwisko[DL_SLOWA] = { '\0' };
-				char imie[DL_SLOWA] = { '\0' };
-				double punkty;
-				fscanf_s(in, "%d", &id);
-				fscanf_s(in, "%s", nazwisko, DL_SLOWA);
-				fscanf_s(in, "%s", imie, DL_SLOWA);
-				fscanf_s(in, "%lf", &punkty);
-
-				strcpy_s(tab[i].nazwisko, DL_SLOWA, nazwisko);
-				strcpy_s(tab[i].imie, DL_SLOWA, imie);
-				tab[i].id = id;
-				tab[i].punkty = punkty;
+				strcpy_s(tab[i].nazwisko, DL_SLOWA, tmp->st.nazwisko);
+				strcpy_s(tab[i].imie, DL_SLOWA, tmp->st.imie);
+				tab[i].id = tmp->st.id;
+				tab[i].punkty = tmp->st.punkty;
+				tmp = tmp->kolejny;
 			}
+			DealokujListe(glowa);
 
 			return zestawienieStudentow{ tab, liczbaLinii };
 		}
@@ -202,7 +240,7 @@ int PobierzIdStudenta(struct student* s, int liczba) {
 	int id = 0, pierwsza = 1;
 	do {
 		if (pierwsza) {
-			printf("podaj id studenta z zestawienia: ");
+			printf("podaj id studenta, ktory zostanie usuniety z zestawienia: ");
 			pierwsza = 0;
 		}
 		else {
