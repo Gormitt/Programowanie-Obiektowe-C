@@ -175,13 +175,13 @@ struct zestawienieStudentow WczytajPlik(char* nazwaPliku) {
 		struct listaJednokierunkowa* glowa = NULL;
 		struct listaJednokierunkowa* dodany = NULL;
 		while (!feof(in)) {
-			if (glowa == NULL) {
+			if (glowa == NULL) { // sprawdzenie czy dodajemy pierwszy element listy
 				glowa = DodajDoListy(in, &liczbaLinii);
 				if (glowa != NULL) {
 					dodany = glowa;
 				}
 			}
-			else {
+			else { // sprawdzenie czy dodajemy niepierwszy element listy
 				dodany->kolejny = DodajDoListy(in, &liczbaLinii);
 				if (dodany->kolejny != NULL) {
 					dodany = dodany->kolejny;
