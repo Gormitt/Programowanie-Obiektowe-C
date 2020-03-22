@@ -176,3 +176,9 @@ int main() {
 
 	return 0;
 }
+
+/*
+TODO:
+1. zmienic slowo kluczowe lista na pomiar, zeby potem odrozniac czujnik od pomiaru
+bo dodanie do listy pomiarow jest inne niz dodanie do listy czujnikow
+*/
