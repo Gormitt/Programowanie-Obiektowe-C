@@ -111,12 +111,14 @@ void DealokujListe(struct pomiar* glowa) {
 	}
 }
 
-void UzupelnijCzujniki(struct pomiar* lista, struct pomiar* (*czujniki)) {
+struct pomiar** UzupelnijCzujniki(struct pomiar* lista) {
+	struct pomiar** czujniki = (struct pomiar**)calloc(sizeof(struct pomiar*), LICZBA_CZUJNIKOW);
+
 	struct pomiar* tmp = lista;
 	struct pomiar* glowy[LICZBA_CZUJNIKOW] = { NULL };
 	struct pomiar* ogony[LICZBA_CZUJNIKOW] = { NULL };
 
-	if (tmp != NULL) {
+	if (tmp != NULL && czujniki != NULL) {
 		while (tmp) {
 			int nr = tmp->nrCzujnika - 1;
 			if (glowy[nr] == NULL) {
@@ -135,14 +137,24 @@ void UzupelnijCzujniki(struct pomiar* lista, struct pomiar* (*czujniki)) {
 
 			tmp = tmp->nastepny;
 		}
-
-		putchar('\n');
-		for (int i = 0; i < LICZBA_CZUJNIKOW; i++) {
-			printf("czujnik nr: %d\n", i + 1);
-			WypiszListe(czujniki[i]);
-			putchar('\n');
-		}
+		return czujniki;
 	}
+}
+
+void WypiszCzujniki(struct pomiar** czujniki) {
+
+	for (int i = 0; i < LICZBA_CZUJNIKOW; i++) {
+		printf("$ rekordy z czujnika nr: %d\n", i + 1);
+		WypiszListe(czujniki[i]);
+		putchar('\n');
+	}
+}
+
+void DealokujCzujniki(struct pomiar** czujniki) {
+	for (int i = 0; i < LICZBA_CZUJNIKOW; i++) {
+		DealokujListe(czujniki[i]);
+	}
+	free(czujniki);
 }
 
 int main() {
@@ -150,12 +162,12 @@ int main() {
 
 	if (fopen_s(&in, "test.txt", "r") == 0 && in != NULL) {
 		struct pomiar* lista = WczytajPlikDoListy(in);
-		struct pomiar* czujniki[LICZBA_CZUJNIKOW] = { NULL };
+		struct pomiar** czujniki = UzupelnijCzujniki(lista);
 
-		UzupelnijCzujniki(lista, czujniki);
+		WypiszCzujniki(czujniki);
 
-		//WypiszListe(lista);
 		DealokujListe(lista);
+		DealokujCzujniki(czujniki);
 	}
 	else {
 		ERROR_PLIK_OTWARCIE
