@@ -20,7 +20,7 @@ void Info() {
 	printf("autor: \tMateusz Wloczewski\n");
 	printf("data: \t24 mar 2020\n");
 	printf("about: \tRozwiazanie wejsciowki na laboratoria nr. 6\n");
-	printf("\tProgram wczytana dane czujnikow temperatury z pliku: dane.txt do listy jednokierunkowej.\n");
+	printf("\tProgram wczytan dane czujnikow temperatury z pliku: dane.txt do listy jednokierunkowej.\n");
 	printf("\tNastepnie zamknie plik i podzieli liste (poprzez przenoszenie elementow) na mniejsze listy\n");
 	printf("\tktore zawiera odczyty odpowiednio z kolejnych czujnikow. Na koniec wypisze liczbe\n");
 	printf("\tpomiarow z kazdego z nich, poprosi o nawe pliku wyjsciowego i utworzy dla kazdego czujnika plik\n");
