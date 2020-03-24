@@ -6,6 +6,7 @@
 #define ERROR_ALOKACJA printf("error - blad podczas alokacji\n");
 #define ERROR_PLIK_OTWARCIE printf("error - nie udalo sie otworzyc podanego pliku\n");
 #define ERROR_PLIK_PUSTY printf("error - plik z danymi jest pusty\n");
+#define ERROR_SLOWO_WCZYTYWANIE printf("error - blad podczas wczytywania slowa, prosze sprobuj ponownie: ");
 
 struct pomiar {
 	unsigned int nrPomiaru;
@@ -15,6 +16,42 @@ struct pomiar {
 	struct pomiar* nastepny;
 };
 
+void Info() {
+	printf("autor: \tMateusz Wloczewski\n");
+	printf("data: \t24 mar 2020\n");
+	printf("about: \tRozwiazanie wejsciowki na laboratoria nr. 6\n");
+	printf("\tProgram wczytana dane czujnikow temperatury z pliku: dane.txt do listy jednokierunkowej.\n");
+	printf("\tNastepnie zamknie plik i podzieli liste (poprzez przenoszenie elementow) na mniejsze listy\n");
+	printf("\tktore zawiera odczyty odpowiednio z kolejnych czujnikow. Na koniec wypisze liczbe\n");
+	printf("\tpomiarow z kazdego z nich, poprosi o nawe pliku wyjsciowego i utworzy dla kazdego czujnika plik\n");
+	printf("\t(dodajac indeks to podanej nazwy) zapisujac do niego dane z konkretnego urzadzenia pomiarowego.\n\n");
+}
+
+/*
+@ brief Funkcja do czyszczenia bufora
+*/
+void CzyszczenieBufora() {
+	while (getchar() != '\n') {}
+}
+
+/*
+@ brief Funkcja do wczytania slowa
+@ param *info - komunikat dla uzytkownika
+@ param *slowo - tablica na przechowanie wczytanego slowa
+*/
+void WczytajSlowo(const char* info, char* slowo) {
+	printf("%s: ", info);
+	while (scanf_s("%s", slowo, DL_SLOWA) != 1 || getchar() != '\n') {
+		CzyszczenieBufora();
+		ERROR_SLOWO_WCZYTYWANIE
+	}
+}
+
+/*
+@ brief Funkcja do dodania elementu do listy jednokierunkowej
+@ param *in - wskaznik do konkretnego miejsca w plku, ktory zawiera linie obecnie wczytywana do listy
+@ ret   *nowy - wskaznik do nowo zaalokowanego elementu listy
+*/
 struct pomiar* DodajElementListy(FILE* in) {
 	struct pomiar* nowy = (struct pomiar*)malloc(sizeof(struct pomiar));
 	if (nowy != NULL) {
@@ -47,24 +84,11 @@ struct pomiar* DodajElementListy(FILE* in) {
 	}
 }
 
-struct pomiar* DodajElementListy(int nrPomiaru, int nrCzujnika, char data[DL_SLOWA], double temp) {
-	struct pomiar* nowy = (struct pomiar*)malloc(sizeof(struct pomiar));
-	if (nowy != NULL) {
-		nowy->nastepny = NULL;
-
-		nowy->nrPomiaru = nrPomiaru;
-		nowy->nrCzujnika = nrCzujnika;
-		nowy->temp = temp;
-		strcpy_s(nowy->data, DL_SLOWA, data);
-
-		return nowy;
-	}
-	else {
-		ERROR_ALOKACJA
-		exit(0);
-	}
-}
-
+/*
+@ brief Funkcja do wczytywania pliku do listy
+@ param *in - wskaznik do poczatku otwartego wczesniej pliku z danymi wejsciowymi
+@ ret   *glowa - wskaznik do pierwszego elementu listy
+*/
 struct pomiar* WczytajPlikDoListy(FILE* in) {
 	struct pomiar* glowa = NULL;
 	struct pomiar* ogon = NULL;
@@ -89,19 +113,10 @@ struct pomiar* WczytajPlikDoListy(FILE* in) {
 	return glowa;
 }
 
-void WypiszListe(struct pomiar* glowa) {
-	struct pomiar* tmp = glowa;
-	if (tmp == NULL) {
-		printf("info: lista jest pusta\n");
-	}
-	else {
-		while (tmp) {
-			printf("%d %d %s %lf\n", tmp->nrPomiaru, tmp->nrCzujnika, tmp->data, tmp->temp);
-			tmp = tmp->nastepny;
-		}
-	}
-}
-
+/*
+@ brief Funkcja do dealokacji listy
+@ param *glowa - wskaznik do poczatku listys
+*/
 void DealokujListe(struct pomiar* glowa) {
 	struct pomiar* ogon = NULL;
 	while (glowa) {
@@ -111,63 +126,92 @@ void DealokujListe(struct pomiar* glowa) {
 	}
 }
 
-struct pomiar** UzupelnijCzujniki(struct pomiar* lista) {
+/*
+@ brief Funkcja do podzialu listy jednokierunkowej na LICZBA_CZUJNIKOW list jednokierunkowych
+@ param *lista - wskaznik do glowy listy, ktora dzielimy
+@ param *pomiaryCzujnikow - tablica, ktora przechowa liczbe pomiarow z kadego czujnika
+@ ret   **czujniki - wskaznik do dynamicznej tablicy, przechowujacej glowy list, czyli wskazniki do pierwszych
+        elementow kazdej z utoroznych list
+*/
+struct pomiar** UzupelnijCzujniki(struct pomiar* lista, int* pomiaryCzujnikow) {
 	struct pomiar** czujniki = (struct pomiar**)calloc(sizeof(struct pomiar*), LICZBA_CZUJNIKOW);
-
-	struct pomiar* tmp = lista;
-	struct pomiar* glowy[LICZBA_CZUJNIKOW] = { NULL };
-	struct pomiar* ogony[LICZBA_CZUJNIKOW] = { NULL };
-
-	if (tmp != NULL && czujniki != NULL) {
-		while (tmp) {
-			int nr = tmp->nrCzujnika - 1;
-			if (glowy[nr] == NULL) {
-				glowy[nr] = DodajElementListy(tmp->nrPomiaru, tmp->nrCzujnika, tmp->data, tmp->temp);
-				if (glowy[nr] != NULL) {
-					ogony[nr] = glowy[nr];
-				}
+	struct pomiar** dane = (struct pomiar**)calloc(sizeof(struct pomiar*), LICZBA_CZUJNIKOW);
+	if (czujniki != NULL && dane != NULL) {
+		while (lista) {
+			struct pomiar* tmp = lista->nastepny;
+			
+			int numer = lista->nrCzujnika - 1;
+			if (czujniki[numer] == NULL) {
+				czujniki[numer] = lista;
+				dane[numer] = czujniki[numer];
 			}
 			else {
-				ogony[nr]->nastepny = DodajElementListy(tmp->nrPomiaru, tmp->nrCzujnika, tmp->data, tmp->temp);
-				if (ogony[nr]->nastepny != NULL) {
-					ogony[nr] = ogony[nr]->nastepny;
-				}
+				dane[numer]->nastepny = lista;
+				dane[numer] = dane[numer]->nastepny;
 			}
-			czujniki[nr] = glowy[nr];
-
-			tmp = tmp->nastepny;
+			pomiaryCzujnikow[numer] += 1;
+			lista->nastepny = NULL;
+			lista = tmp;
 		}
+		free(dane);
 		return czujniki;
 	}
-}
-
-void WypiszCzujniki(struct pomiar** czujniki) {
-
-	for (int i = 0; i < LICZBA_CZUJNIKOW; i++) {
-		printf("$ rekordy z czujnika nr: %d\n", i + 1);
-		WypiszListe(czujniki[i]);
-		putchar('\n');
+	else {
+		ERROR_ALOKACJA
+		exit(0);
 	}
 }
 
-void DealokujCzujniki(struct pomiar** czujniki) {
-	for (int i = 0; i < LICZBA_CZUJNIKOW; i++) {
-		DealokujListe(czujniki[i]);
+/*
+@ brief Funkcja do zapisania listy do pliku
+@ param *out - wskaznik do poczatku pliku otwartego w trybie w+ (utworz lub zastap plik nowym - do zapisu)
+@ param *lista - wskaznik do poczatku zapisywanej listy
+*/
+void ZapiszListeDoPliku(FILE* out, struct pomiar* lista) {
+	while (lista) {
+		fprintf(out, "%d %d %s %lf\n", lista->nrPomiaru, lista->nrCzujnika, lista->data, lista->temp);
+		lista = lista->nastepny;
 	}
-	free(czujniki);
 }
 
 int main() {
+	Info();
 	FILE* in;
+	FILE* out;
 
-	if (fopen_s(&in, "test.txt", "r") == 0 && in != NULL) {
+	int* pomiaryCzujnikow = (int*)calloc(sizeof(int), LICZBA_CZUJNIKOW);
+	if (pomiaryCzujnikow == NULL) {
+		ERROR_ALOKACJA
+		exit(0);
+	}
+	else if (fopen_s(&in, "dane.txt", "r") == 0 && in != NULL) {
 		struct pomiar* lista = WczytajPlikDoListy(in);
-		struct pomiar** czujniki = UzupelnijCzujniki(lista);
+		struct pomiar** czujniki = UzupelnijCzujniki(lista, pomiaryCzujnikow);;
+		lista = NULL;
 
-		WypiszCzujniki(czujniki);
+		for (int i = 0; i < LICZBA_CZUJNIKOW; i++) {
+			printf("liczba pomiarow wykonanych przez czujnik nr. %d: %d\n", i + 1, pomiaryCzujnikow[i]);
+		}
+		
+		char nazwaout[DL_SLOWA];
+		WczytajSlowo("podaj nazwe pliku wyjsciowego [do nazwy zostanie automatycznie dodany numer czujnika]", nazwaout);
+		for (int i = 0; i < LICZBA_CZUJNIKOW; i++) {
+			char tmp[DL_SLOWA + 1] = { '\0' };
+			char ind[DL_SLOWA] = { '1' + i, '.', 't', 'x', 't', '\0' };
+			strcpy_s(tmp, DL_SLOWA + 1, nazwaout);
+			strcat_s(tmp, DL_SLOWA + 1, ind);
+			if (fopen_s(&out, tmp, "w+") == 0 && out != NULL) {
+				ZapiszListeDoPliku(out, czujniki[i]);
+				fclose(out);
+			}
+			else {
+				ERROR_PLIK_OTWARCIE
+			}
+		}
 
+		free(czujniki);
+		free(pomiaryCzujnikow);
 		DealokujListe(lista);
-		DealokujCzujniki(czujniki);
 	}
 	else {
 		ERROR_PLIK_OTWARCIE
@@ -176,9 +220,3 @@ int main() {
 
 	return 0;
 }
-
-/*
-TODO:
-1. zmienic slowo kluczowe lista na pomiar, zeby potem odrozniac czujnik od pomiaru
-bo dodanie do listy pomiarow jest inne niz dodanie do listy czujnikow
-*/
