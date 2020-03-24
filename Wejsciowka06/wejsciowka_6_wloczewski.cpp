@@ -174,6 +174,17 @@ void ZapiszListeDoPliku(FILE* out, struct pomiar* lista) {
 	}
 }
 
+/*
+@ brief Funkcja do dealokowania list zawierajacych dane z kolejnych czujnikow
+@ param **czujniki - tablica wskaznikow do kazdej z list
+*/
+void DealokujCzujniki(struct pomiar** czujniki) {
+	for (int i = 0; i < LICZBA_CZUJNIKOW; i++) {
+		DealokujListe(czujniki[i]);
+	}
+	free(czujniki);
+}
+
 int main() {
 	Info();
 	FILE* in;
@@ -209,9 +220,10 @@ int main() {
 			}
 		}
 
-		free(czujniki);
+		fclose(in);
 		free(pomiaryCzujnikow);
 		DealokujListe(lista);
+		DealokujCzujniki(czujniki);
 	}
 	else {
 		ERROR_PLIK_OTWARCIE
