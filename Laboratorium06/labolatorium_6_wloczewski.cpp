@@ -16,6 +16,10 @@ struct pomiar {
 	struct pomiar* nastepny;
 };
 
+struct listyCzujnikow {
+	struct pomiar** czujniki;
+};
+
 void Info() {
 	printf("autor: \tMateusz Wloczewski\n");
 	printf("data: \t24 mar 2020\n");
@@ -84,6 +88,7 @@ struct pomiar* DodajElementListy(FILE* in) {
 	}
 }
 
+// Funkcja 3.
 /*
 @ brief Funkcja do wczytywania pliku do listy
 @ param *in - wskaznik do poczatku otwartego wczesniej pliku z danymi wejsciowymi
@@ -100,7 +105,7 @@ struct pomiar* WczytajPlikDoListy(FILE* in) {
 			}
 			else { // jezeli funkcja chce dodac jako pierwszy element null to plik jest pusty
 				ERROR_PLIK_PUSTY
-				exit(0);
+				return NULL;
 			}
 		}
 		else {
@@ -130,47 +135,36 @@ void DealokujListe(struct pomiar* glowa) {
 @ brief Funkcja do podzialu listy jednokierunkowej na LICZBA_CZUJNIKOW list jednokierunkowych
 @ param *lista - wskaznik do glowy listy, ktora dzielimy
 @ param *pomiaryCzujnikow - tablica, ktora przechowa liczbe pomiarow z kadego czujnika
-@ ret   **czujniki - wskaznik do dynamicznej tablicy, przechowujacej glowy list, czyli wskazniki do pierwszych
+@ ret   struct listyCzujnikow - strukturalny typ danych ktory zawiera wskaznik do dynamicznej tablicy, 
+        przechowujacej glowy list, czyli wskazniki do pierwszych
         elementow kazdej z utoroznych list
 */
-struct pomiar** UzupelnijCzujniki(struct pomiar* lista, int* pomiaryCzujnikow) {
+struct listyCzujnikow UzupelnijCzujniki(struct pomiar** lista) {
 	struct pomiar** czujniki = (struct pomiar**)calloc(sizeof(struct pomiar*), LICZBA_CZUJNIKOW);
 	struct pomiar** dane = (struct pomiar**)calloc(sizeof(struct pomiar*), LICZBA_CZUJNIKOW);
 	if (czujniki != NULL && dane != NULL) {
-		while (lista) {
-			struct pomiar* tmp = lista->nastepny;
-			
-			int numer = lista->nrCzujnika - 1;
+		while (*lista) {
+			struct pomiar* tmp = (*lista)->nastepny;
+
+			int numer = (*lista)->nrCzujnika - 1;
 			if (czujniki[numer] == NULL) {
-				czujniki[numer] = lista;
+				czujniki[numer] = (*lista);
 				dane[numer] = czujniki[numer];
 			}
 			else {
-				dane[numer]->nastepny = lista;
+				dane[numer]->nastepny = (*lista);
 				dane[numer] = dane[numer]->nastepny;
 			}
-			pomiaryCzujnikow[numer] += 1;
-			lista->nastepny = NULL;
-			lista = tmp;
+			(*lista)->nastepny = NULL;
+			(*lista) = tmp;
 		}
 		free(dane);
-		return czujniki;
+		(*lista) = NULL;
+		return listyCzujnikow{ czujniki };
 	}
 	else {
 		ERROR_ALOKACJA
 		exit(0);
-	}
-}
-
-/*
-@ brief Funkcja do zapisania listy do pliku
-@ param *out - wskaznik do poczatku pliku otwartego w trybie w+ (utworz lub zastap plik nowym - do zapisu)
-@ param *lista - wskaznik do poczatku zapisywanej listy
-*/
-void ZapiszListeDoPliku(FILE* out, struct pomiar* lista) {
-	while (lista) {
-		fprintf(out, "%d %d %s %lf\n", lista->nrPomiaru, lista->nrCzujnika, lista->data, lista->temp);
-		lista = lista->nastepny;
 	}
 }
 
@@ -185,50 +179,118 @@ void DealokujCzujniki(struct pomiar** czujniki) {
 	free(czujniki);
 }
 
+// Funkcja 1
+/*
+@ brief Funkcja ktora otwiera plik po podanej nazwie i wywoluje wczytanie do listy. 
+        Zapisana liste zwraca w postaci typu strukturalnego ktory zawiera wskaznik do listy dynamicznej
+@ param *const nazwa - wskaznik do tablicy zawierajacej nazwe pliku z danymi
+@ ret   struct pomiar* lista - wskaznik do struktury ktorej jedynym polem jest wskaznik do listy dynamicznej z rekordami
+*/
+struct pomiar* OtworzPlik(const char* nazwa) {
+	FILE* in;
+	if (fopen_s(&in, nazwa, "r") == 0 && in != NULL) {
+		// Funkcja 3.
+		struct pomiar* lista = WczytajPlikDoListy(in);
+		fclose(in);
+		return lista;
+	}
+}
+
+// Funkcja 2.
+/*
+@ brief Funkcja do oblicznia ilosci rekordow, wyswietlenia tej liczby i wypisania pierwszego jak i ostatniego rekordu
+@ param *lista - wskaznik do dynamicznej listy jednokierunkowej z rekordami
+*/
+void PoliczRekordy(struct pomiar* lista) {
+	int liczbaRekordow = 0;
+	struct pomiar* ostatni = lista, *pierwszy = lista;
+	while (lista) {
+		if (liczbaRekordow == 0) {
+			pierwszy = lista;
+		}
+		else {
+			ostatni = lista;
+		}
+		liczbaRekordow++;
+
+		lista = lista->nastepny;
+	}
+	if (liczbaRekordow != 0) {
+		printf("liczba rekordow: %d\n", liczbaRekordow);
+		printf("pierwszy rekord: %d %d %s %lf\n", pierwszy->nrPomiaru, pierwszy->nrCzujnika, pierwszy->data, pierwszy->temp);
+		printf("ostatni rekord: %d %d %s %lf\n", ostatni->nrPomiaru, ostatni->nrCzujnika, ostatni->data, ostatni->temp);
+	}
+}
+
+// Funkcja 4.
+/*
+@ brief Funckja ktora znajduje najmniejszy element w danej liscie i wyrzuca go na koniec listy
+@ param *lista - wskaznik do listy dynamicznej z rekordami
+@ ret   wskaznik do poczatku zmodyfikowanej listy jednokierunkowej
+*/
+struct pomiar* ZnajdzNajmniejszy(struct pomiar* lista) { 
+	if (lista == NULL) return NULL; // lista pusta
+	else if (lista->nastepny == NULL) return lista; // lista jednoelementowa
+	struct pomiar* tmp = lista;
+	struct pomiar* wskNajmniejszy = NULL;
+	struct pomiar* wskPoprzedzajacy = NULL;
+	double najmniejszy = tmp->temp;
+	int czyZnaleziono = 0;
+	while (tmp) {
+		if (tmp->nastepny != NULL && tmp->nastepny->temp < najmniejszy) {
+			wskNajmniejszy = tmp->nastepny;
+			wskPoprzedzajacy = tmp;
+			najmniejszy = tmp->nastepny->temp;
+			czyZnaleziono = 1;
+		}
+		else if (tmp->nastepny == NULL) { // dotarlismy do ostatniego elementu
+			if (czyZnaleziono && wskNajmniejszy->nastepny == NULL) {
+				return lista;
+			}
+			else if (czyZnaleziono) {
+				wskPoprzedzajacy->nastepny = wskNajmniejszy->nastepny;
+				tmp->nastepny = wskNajmniejszy;
+				wskNajmniejszy->nastepny = NULL;
+				return lista;
+			}
+			else {
+				struct pomiar* zwrot = lista->nastepny;
+				tmp->nastepny = lista;
+				lista->nastepny = NULL;
+				return zwrot;
+			}
+		}
+		
+		tmp = tmp->nastepny;
+	}
+}
+
 int main() {
 	Info();
 	FILE* in;
-	FILE* out;
+	char nazwain[DL_SLOWA];
+	
+	// wczytywanie pliku do listy dynamicznej
+	WczytajSlowo("podaj nazwe pliku wejsciowego", nazwain);
+	struct pomiar* lista = OtworzPlik(nazwain);
+	struct listyCzujnikow lc;
 
-	int* pomiaryCzujnikow = (int*)calloc(sizeof(int), LICZBA_CZUJNIKOW);
-	if (pomiaryCzujnikow == NULL) {
-		ERROR_ALOKACJA
-		exit(0);
-	}
-	else if (fopen_s(&in, "dane.txt", "r") == 0 && in != NULL) {
-		struct pomiar* lista = WczytajPlikDoListy(in);
-		struct pomiar** czujniki = UzupelnijCzujniki(lista, pomiaryCzujnikow);
-		lista = NULL;
+	printf("WSZYSTKIE POMIARY: \n");
+	PoliczRekordy(lista);
+	printf("\n");
 
-		for (int i = 0; i < LICZBA_CZUJNIKOW; i++) {
-			printf("liczba pomiarow wykonanych przez czujnik nr. %d: %d\n", i + 1, pomiaryCzujnikow[i]);
-		}
-		
-		char nazwaout[DL_SLOWA];
-		WczytajSlowo("podaj nazwe pliku wyjsciowego [do nazwy zostanie automatycznie dodany numer czujnika]", nazwaout);
-		for (int i = 0; i < LICZBA_CZUJNIKOW; i++) {
-			char tmp[DL_SLOWA + 1] = { '\0' };
-			char ind[DL_SLOWA] = { '1' + i, '.', 't', 'x', 't', '\0' };
-			strcpy_s(tmp, DL_SLOWA + 1, nazwaout);
-			strcat_s(tmp, DL_SLOWA + 1, ind);
-			if (fopen_s(&out, tmp, "w+") == 0 && out != NULL) {
-				ZapiszListeDoPliku(out, czujniki[i]);
-				fclose(out);
-			}
-			else {
-				ERROR_PLIK_OTWARCIE
-			}
-		}
-
-		fclose(in);
-		free(pomiaryCzujnikow);
-		DealokujListe(lista);
-		DealokujCzujniki(czujniki);
+	lc = UzupelnijCzujniki(&lista);
+	for (int i = 0; i < LICZBA_CZUJNIKOW; i++) {
+		printf("CZUJNIK NR. %d\n", i + 1);
+		PoliczRekordy(lc.czujniki[i]);
+		printf("\nZmodyfikowana lista rekordow\n");
+		lc.czujniki[i] = ZnajdzNajmniejszy(lc.czujniki[i]);
+		PoliczRekordy(lc.czujniki[i]);
+		printf("\n\n");
 	}
-	else {
-		ERROR_PLIK_OTWARCIE
-		exit(0);
-	}
+	
+	DealokujListe(lista);
+	DealokujCzujniki(lc.czujniki);
 
 	return 0;
 }
