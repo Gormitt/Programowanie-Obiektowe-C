@@ -454,6 +454,8 @@ int main() {
 	WypiszListeDwukierunkowa(listaDwukierunkowa, 50, 20);
 	//WypiszCalaListeDwukierunkowa(listaDwukierunkowa);
 
+	printf("\n*ewentualnie zamiast tego mozna wywolac funkcje ktora wypisze cala liste dynamiczna w dwie strony\n");
+
 	DealokujListe(lista);
 	DealokujCzujniki(lc.czujniki);
 	DealokujListeDwukierunkowa(listaDwukierunkowa);
