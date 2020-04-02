@@ -20,6 +20,9 @@ struct tablicaPomiarow {
 	struct pomiar** pomiary;
 };
 
+/*
+@ brief Funkcja do wypisywania podstawowych informacji o programie
+*/
 void Info() {
 	printf("autor: \tMateusz Wloczewski\n");
 	printf("data: \t2 kwi 2020\n");
@@ -30,6 +33,15 @@ void Info() {
 	printf("\ttak ze poprzednie 4 listy sa puste. Na koniec zapisuje wszystko do pliku.\n\n");
 }
 
+/*
+@ brief Funkcja do dodania jednego rekordu do listy dynamicznej dwukierunkowej
+@ param *poprzedni - wskaznik do poprzedniego elementu [aby go podczepic]
+@ param *nrPomiaru - wskaznik przechowujacy numer pomiaru ktory dodajemy
+@ param *nrCzujnika - wskaznik przechowujacy numer czujnika z ktorego pochodzi pomiar
+@ param *data - wskaznik do daty pomiaru
+@ param *temperatura - wskaznik do zczytanej temperatury
+@ ret   *element - wskaznik do elementu listy
+*/
 struct pomiar* DodajRekordDoListy(struct pomiar* poprzedni, int* nrPomiart, int* nrCzujnika, char* data, double* temperatura) {
 	struct pomiar* element = (struct pomiar*)calloc(sizeof(struct pomiar), 1);
 	if (element) {
@@ -49,6 +61,13 @@ struct pomiar* DodajRekordDoListy(struct pomiar* poprzedni, int* nrPomiart, int*
 	}
 }
 
+/*
+@ brief Funkcja do otwarcia pliku, a nastepnie wczytania do go listy dynamicznych dwukierunkowych
+        Funkcja poprawnie obsluzy przypadek gdy w pliku bedzie wiecej niz 4 czujniki ale co najwyzej tyle 
+        ile jest zadeklarowane w stalej MAX_LICZBA_CZUJNIKOW
+@ param *nazwain - nazwa pliku wejsciowego
+@ ret   tablicaPomiarow - typ strukturalny, zawierajacy dynamiczna tablice glow to list, oraz liczbe z ilu czujnikow pochodza rekordy
+*/
 struct tablicaPomiarow OtworzPlik(char* nazwain) {
 	FILE* in;
 	if (fopen_s(&in, nazwain, "r") == 0 && in != NULL) {
@@ -108,6 +127,10 @@ struct tablicaPomiarow OtworzPlik(char* nazwain) {
 	}
 }
 
+/*
+@ brief Funkcja do dealokacji listy dynamicznej
+@ param *lista - wskaznik do glowy dealokowanej listy
+*/
 void DealokujListe(struct pomiar* lista) {
 	struct pomiar* tmp = NULL;
 	while (lista) {
@@ -117,6 +140,11 @@ void DealokujListe(struct pomiar* lista) {
 	}
 }
 
+/*
+@ brief Funkcja do dealokowania wszystkich list, z rekordami z kilku czujnikow
+@ param *tab - wskaznik do struktury, ktora zawiera wskaznik do tablicy ze wskaznikami do glow
+@ ret   tablicaPomiarow - zwracamy pusty typ strukturalny, tzn. po dealokacji wpisujemy do struktury NULL (jako wskaznik) oraz 0 (jako liczbe czujnikow)
+*/
 struct tablicaPomiarow DealokujTabliceList(struct tablicaPomiarow* tab) {
 	for (int i = 0; i < tab->wielkosc; i++) {
 		DealokujListe(tab->pomiary[i]);
@@ -124,9 +152,14 @@ struct tablicaPomiarow DealokujTabliceList(struct tablicaPomiarow* tab) {
 	return tablicaPomiarow{ 0, NULL };
 }
 
+/*
+@ brief Funkcja do zliczenia elementow w listach czujnikow oraz wypisania rekordow z kadenj z nich z najnizsza zanotowana temperatura
+@ param *tab - wskaznik do typu strukturalnego zawierajacego wskazniki do glow
+@ ret   suma - ile jest rekordow we wszystkich listach z rekordami
+*/
 int PoliczElementy(struct tablicaPomiarow* tab) {
-	int suma = 0;
-	struct pomiar** tmp = (struct pomiar**)calloc(sizeof(struct pomiar*), tab->wielkosc);
+	int suma = 0; 
+	struct pomiar** tmp = (struct pomiar**)calloc(sizeof(struct pomiar*), tab->wielkosc); // to nam jest potrzebne, do cofniecia wskaznikow do list
 	if (tmp != NULL) {
 		for (int i = 0; i < tab->wielkosc; i++) {
 			tmp[i] = tab->pomiary[i];
@@ -159,7 +192,7 @@ int PoliczElementy(struct tablicaPomiarow* tab) {
 	}
 	putchar('\n');
 
-	for (int i = 0; i < tab->wielkosc; i++) {
+	for (int i = 0; i < tab->wielkosc; i++) { // cofamy przesuniete wskazniki do glow list, aby nie "popsuc" struktury oryginalnej
 		tab->pomiary[i] = tmp[i];
 	}
 
@@ -167,6 +200,13 @@ int PoliczElementy(struct tablicaPomiarow* tab) {
 	return suma;
 }
 
+/*
+@ brief Funkcja do scalenia list zawierajacych rekordy z czujnikow w jedna liste
+        Funkcja nie tworzy nowych elementow alokowaniem dodatkowej pamieci, tylko przneosi elementy operujac 
+        na tym na co wskazuja wskazniki do poprzedniego i nastepnego elementu listy
+@ param *tab - wskaznik do typu strukturalnego zawierajacego wskazniki do list
+@ ret   *glowa - wskaznik do nowo utworzonej listy
+*/
 struct pomiar* Scal(struct tablicaPomiarow* tab) {
 	int przenos = 1;
 	struct pomiar* glowa = NULL;
@@ -212,6 +252,12 @@ struct pomiar* Scal(struct tablicaPomiarow* tab) {
 	return glowa;
 }
 
+/*
+@ brief Funkcja do zapisania listy do pliku
+@ param *lista - wskaznik do zapisywanej listy
+@ param liczbaRekordow - liczba wszystkich rekordow [po to aby wypisac na poczatek pliku]
+@ param liczbaCzujnikow - liczba czujnikow [ten sam cel]
+*/
 void ZapiszListeDoPliku(struct pomiar* lista, int liczbaRekordow, int liczbaCzujnikow) {
 	FILE* out;
 	if (fopen_s(&out, "wynik.txt", "w+") == 0 && out != NULL) {
