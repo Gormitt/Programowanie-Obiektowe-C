@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdlib.h>
+#include <string.h>
 
 #define MAX_LICZBA_CZUJNIKOW 10
 #define MAX_DLUGOSC_SLOWA 30
@@ -18,6 +19,16 @@ struct tablicaPomiarow {
 	int wielkosc;
 	struct pomiar** pomiary;
 };
+
+void Info() {
+	printf("autor: \tMateusz Wloczewski\n");
+	printf("data: \t2 kwi 2020\n");
+	printf("about: \tRozwiazanie wejsciowki nr. 7\n");
+	printf("\tProgram otwiera plik dane.txt, wczytuje z niego rekordy do kilku list.\n");
+	printf("\tNastepnie zlicza i wypisuje ile jest elementow w kazdej z nich.\n");
+	printf("\tW kolejnym kroku przenosi rekordy do jednej listy (w kolejnosci od najwczesniejszego),\n");
+	printf("\ttak ze poprzednie 4 listy sa puste. Na koniec zapisuje wszystko do pliku.\n\n");
+}
 
 struct pomiar* DodajRekordDoListy(struct pomiar* poprzedni, int* nrPomiart, int* nrCzujnika, char* data, double* temperatura) {
 	struct pomiar* element = (struct pomiar*)calloc(sizeof(struct pomiar), 1);
@@ -41,7 +52,7 @@ struct pomiar* DodajRekordDoListy(struct pomiar* poprzedni, int* nrPomiart, int*
 struct tablicaPomiarow OtworzPlik(char* nazwain) {
 	FILE* in;
 	if (fopen_s(&in, nazwain, "r") == 0 && in != NULL) {
-		printf("info: poprawnie otworzono plik %s\n", nazwain);
+		printf("info: poprawnie otwarto plik %s\n", nazwain);
 
 		int liczbaCzujnikow = 0;
 		struct pomiar** glowa = (struct pomiar**)calloc(sizeof(struct pomiar*), MAX_LICZBA_CZUJNIKOW);
@@ -113,7 +124,8 @@ struct tablicaPomiarow DealokujTabliceList(struct tablicaPomiarow* tab) {
 	return tablicaPomiarow{ 0, NULL };
 }
 
-void PoliczElementy(struct tablicaPomiarow* tab) {
+int PoliczElementy(struct tablicaPomiarow* tab) {
+	int suma = 0;
 	struct pomiar** tmp = (struct pomiar**)calloc(sizeof(struct pomiar*), tab->wielkosc);
 	if (tmp != NULL) {
 		for (int i = 0; i < tab->wielkosc; i++) {
@@ -137,6 +149,7 @@ void PoliczElementy(struct tablicaPomiarow* tab) {
 				}
 				tab->pomiary[i] = tab->pomiary[i]->nastepny;
 			}
+			suma += liczba;
 			printf("liczba rekordow czujnika nr. %d: %d\t", i + 1, liczba);
 			printf("najnizsza: %d %d %s %.2lf\n", najwiekszy->nrPomiaru, najwiekszy->nrCzujnika, najwiekszy->data, najwiekszy->temperatura);
 		}
@@ -144,10 +157,14 @@ void PoliczElementy(struct tablicaPomiarow* tab) {
 			printf("czujnik nr. %d nie wykonal rzadnych pomiarow\n", i + 1);
 		}
 	}
+	putchar('\n');
+
 	for (int i = 0; i < tab->wielkosc; i++) {
 		tab->pomiary[i] = tmp[i];
 	}
+
 	free(tmp);
+	return suma;
 }
 
 struct pomiar* Scal(struct tablicaPomiarow* tab) {
@@ -165,13 +182,13 @@ struct pomiar* Scal(struct tablicaPomiarow* tab) {
 		if (przenos) {
 			int pierwszy = 1;
 			int indeks = 0;
-			double wartoscNajnizsza = 0;
+			char dataNajmniejsza[MAX_DLUGOSC_SLOWA] = { '\0' };
 			struct pomiar* wskNajnizsza = NULL;
 			for (int i = 0; i < tab->wielkosc; i++) {
-				if ((tab->pomiary[i] != NULL && pierwszy) || (tab->pomiary[i] != NULL && tab->pomiary[i]->temperatura < wartoscNajnizsza)) {
+				if ((tab->pomiary[i] != NULL && pierwszy) || (tab->pomiary[i] != NULL && memcmp(tab->pomiary[i]->data, dataNajmniejsza, MAX_DLUGOSC_SLOWA) < 0)) {
 					if (pierwszy) pierwszy = 0;
+					strcpy_s(dataNajmniejsza, MAX_DLUGOSC_SLOWA, tab->pomiary[i]->data);
 					indeks = i;
-					wartoscNajnizsza = tab->pomiary[i]->temperatura;
 					wskNajnizsza = tab->pomiary[i];
 				}
 			}
@@ -195,18 +212,16 @@ struct pomiar* Scal(struct tablicaPomiarow* tab) {
 	return glowa;
 }
 
-void ZapiszListeDoPliku(struct pomiar* lista) {
+void ZapiszListeDoPliku(struct pomiar* lista, int liczbaRekordow, int liczbaCzujnikow) {
 	FILE* out;
 	if (fopen_s(&out, "wynik.txt", "w+") == 0 && out != NULL) {
+		fprintf(out, "REKORDY\nliczba wszystkich pomiarow: %d\nliczba wszystkich czujnikow: %d\n\n", liczbaRekordow, liczbaCzujnikow);
 		while (lista) {
-			fprintf(out, "%d %d %s %lf\n", lista->nrPomiaru, lista->nrCzujnika, lista->data, lista->temperatura);
-			struct pomiar* tmp = lista->nastepny;
-			free(lista);
-			lista = tmp;
+			fprintf(out, "%d\t%d\t%s\t%.2lf\n", lista->nrPomiaru, lista->nrCzujnika, lista->data, lista->temperatura);
+			lista = lista->nastepny;
 		}
 		fclose(out);
-		printf("info: lista zostala zapisana do pliku\n");
-		printf("info: lista zostala zdealokowana\n\n");
+		printf("info: poprawnie utworzono, zapelniono rekordami i zamknieto plik wynik.txt\n");
 	}
 	else {
 		printf("error - blad podczas otwierania pliku wynikowego\n");
@@ -215,18 +230,20 @@ void ZapiszListeDoPliku(struct pomiar* lista) {
 }
 
 int main() {
-	char nazwain[MAX_DLUGOSC_SLOWA] = "test.txt";
+	Info();
+	char nazwain[MAX_DLUGOSC_SLOWA] = "dane.txt";
 	struct tablicaPomiarow tab = OtworzPlik(nazwain);
 	
 	if (tab.pomiary != NULL) {
-		PoliczElementy(&tab);
+		int suma = PoliczElementy(&tab);
 		struct pomiar* lista = Scal(&tab);
-		ZapiszListeDoPliku(lista);
+		ZapiszListeDoPliku(lista, suma, tab.wielkosc);
+		DealokujListe(lista);
 	}
 	else {
 		printf("error - plik z danymi jest pusty\n");
 	}
-
 	tab = DealokujTabliceList(&tab);
+
 	return 0;
 }
