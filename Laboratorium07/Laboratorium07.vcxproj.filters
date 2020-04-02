@@ -15,12 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="wejsciowka_7_wloczewski.cpp">
+    <ClCompile Include="laboratorium_7_wloczewski.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="test.txt">
+    <Text Include="test1.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="test2.txt">
       <Filter>Source Files</Filter>
     </Text>
   </ItemGroup>
