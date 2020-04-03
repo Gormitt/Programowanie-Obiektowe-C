@@ -23,6 +23,10 @@ void WypiszElement(struct pomiar* element) {
 }
 
 void WypiszListe(struct pomiar* lista) {
+	if (lista == NULL) {
+		printf("info: lista nie zawiera elementow\n");
+		return;
+	}
 	while (lista) {
 		WypiszElement(lista);
 		if (lista->nastepny == NULL) break;
@@ -66,6 +70,23 @@ struct pomiar* DodajDoListy(FILE* in, struct pomiar* poprzedni) {
 	}
 }
 
+struct pomiar* DodajElement(struct pomiar* najwyzsza, struct pomiar* poprzedni) {
+	struct pomiar* element = (struct pomiar*)calloc(sizeof(struct pomiar), 1);
+	if (element) {
+		element->poprzedni = poprzedni;
+		element->nastepny = NULL;
+		element->nrPomiaru = najwyzsza->nrPomiaru;
+		element->nrCzujnika = najwyzsza->nrCzujnika;
+		element->temperatura = najwyzsza->temperatura;
+		strcpy_s(element->data, MAX_DLUGOSC_SLOWA, najwyzsza->data);
+		return element;
+	}
+	else {
+		printf("error - blad podczas alokacji\nkoniec programu\n");
+		exit(0);
+	}
+}
+
 // Funkcja nr. 1
 struct pomiar* OtworzPlik(const char* nazwain) {
 	FILE* in;
@@ -101,6 +122,10 @@ struct pomiar* OtworzPlik(const char* nazwain) {
 
 // Funkcja nr. 2
 void PoliczElementy(struct pomiar* lista) {
+	if (lista == NULL) {
+		printf("info: lista nie zawiera elementow\n\n");
+		return;
+	}
 	int suma = 0;
 	struct pomiar* pierwszy = NULL, * ostatni = NULL;
 	while (lista) {
@@ -119,29 +144,32 @@ void PoliczElementy(struct pomiar* lista) {
 }
 
 // Funkcja nr. 3
-struct tablicaPomiarow Scal(struct pomiar* lista) {
+struct tablicaPomiarow Scal(struct pomiar** lista) {
 	struct pomiar** glowa = (struct pomiar**)calloc(sizeof(struct pomiar*), MAX_LICZBA_CZUJNIKOW);
 	struct pomiar** ogon = (struct pomiar**)calloc(sizeof(struct pomiar*), MAX_LICZBA_CZUJNIKOW);
 	if (glowa != NULL && ogon != NULL) {
-		while (lista) {
-			struct pomiar* tmp = lista->nastepny;
-			if (glowa[lista->nrCzujnika - 1] == NULL) {
-				glowa[lista->nrCzujnika - 1] = lista;
-				glowa[lista->nrCzujnika - 1]->poprzedni = NULL;
-				glowa[lista->nrCzujnika - 1]->nastepny = NULL;
-				ogon[lista->nrCzujnika - 1] = glowa[lista->nrCzujnika - 1];
+		int liczbaCzujnikow = 0;
+		while ((*lista)) {
+			struct pomiar* tmp = (*lista)->nastepny;
+			if (glowa[(*lista)->nrCzujnika - 1] == NULL) {
+				glowa[(*lista)->nrCzujnika - 1] = (*lista);
+				glowa[(*lista)->nrCzujnika - 1]->poprzedni = NULL;
+				glowa[(*lista)->nrCzujnika - 1]->nastepny = NULL;
+				ogon[(*lista)->nrCzujnika - 1] = glowa[(*lista)->nrCzujnika - 1];
 			}
 			else {
-				ogon[lista->nrCzujnika - 1]->nastepny = lista;
-				ogon[lista->nrCzujnika - 1]->nastepny->poprzedni = ogon[lista->nrCzujnika - 1];
-				ogon[lista->nrCzujnika - 1]->nastepny->nastepny = NULL;
-				ogon[lista->nrCzujnika - 1] = ogon[lista->nrCzujnika - 1]->nastepny;
+				ogon[(*lista)->nrCzujnika - 1]->nastepny = (*lista);
+				ogon[(*lista)->nrCzujnika - 1]->nastepny->poprzedni = ogon[(*lista)->nrCzujnika - 1];
+				ogon[(*lista)->nrCzujnika - 1]->nastepny->nastepny = NULL;
+				ogon[(*lista)->nrCzujnika - 1] = ogon[(*lista)->nrCzujnika - 1]->nastepny;
 			}
-			lista = tmp;
+			if ((*lista)->nrCzujnika > liczbaCzujnikow) {
+				liczbaCzujnikow = (*lista)->nrCzujnika;
+			}
+			(*lista) = tmp;
 		}
-
 		free(ogon);
-		return tablicaPomiarow{ glowa, 4 };
+		return tablicaPomiarow{ glowa, liczbaCzujnikow };
 	}
 	else {
 		printf("error - blad podczas alokacji\nkoniec programu\n");
@@ -149,25 +177,53 @@ struct tablicaPomiarow Scal(struct pomiar* lista) {
 	}
 }
 
+// Funkcja nr. 4
+struct pomiar* NajwyzszyNaKoniec(struct pomiar* lista) {
+	if (lista == NULL) return NULL;
+	
+	struct pomiar* wsk = lista;
+	struct pomiar* kopia = lista;
+	int pierwszy = 1;
+	double najwyzsza = 0;
+	while (true) {
+		if (pierwszy || lista->temperatura > najwyzsza) {
+			if (pierwszy) pierwszy = 0;
+			najwyzsza = lista->temperatura;
+			wsk = lista;
+		}
+		if (lista->nastepny == NULL) break;
+		else lista = lista->nastepny;
+	}
+	// teraz wskaznik jest ustawiony na ostatnim elemencie
+	printf("najwyzsza temperatura: ");
+	WypiszElement(wsk);
+	printf("\n");
+	lista->nastepny = DodajElement(wsk, lista);
+
+	return kopia;
+}
+
+void DealokujTabliceCzujnikow(struct tablicaCzujnikow* tab) {
+
+}
+
 int main() {
-	char nazwain[MAX_DLUGOSC_SLOWA] = "test2.txt";
+	char nazwain[MAX_DLUGOSC_SLOWA] = "test1.txt";
 
 	struct pomiar* lista = OtworzPlik(nazwain);
 	if (lista) {
+		printf("wszystkie czujniki:\n");
 		PoliczElementy(lista);
 
-		struct tablicaPomiarow tablica = Scal(lista);
+		struct tablicaPomiarow tablica = Scal(&lista);
 		for (int i = 0; i < tablica.liczbaPomiarow; i++) {
-			printf("rekordy - czujnik nr. %d: \n", i + 1);
-			WypiszListe(tablica.pomiary[i]);
-			/*
-			while (tablica.pomiary[i]) {
-				//WypiszElement(tablica.pomiary[i]);
-				tablica.pomiary[i] = tablica.pomiary[i]->nastepny;
-			}
-			*/
-			printf("\n");
+			printf("czujnik nr. %d:\n", i + 1);
+			PoliczElementy(tablica.pomiary[i]);
+			tablica.pomiary[i] = NajwyzszyNaKoniec(tablica.pomiary[i]);
+			PoliczElementy(tablica.pomiary[i]);
 		}
+
+
 	}
 	else {
 		printf("error: plik z danymi nie zawiera rekordow\n");
