@@ -228,9 +228,59 @@ void DealokujTabliceCzujnikow(struct tablicaPomiarow* tab) {
 	}
 }
 
+// Zadanie II poziomu
+void FiltrowanieMedianowe(struct pomiar* lista) {
+	if (lista == NULL) {
+		printf("info: lista jest pusta, dlatego nie mozna na niej wykonac filtrowania medianowego\n");
+		return;
+	}
+	else if (lista->nastepny == NULL) {
+		printf("info: lista zawiera tylko jeden element, dlatego nie mozna na niej wykonac filtrowania medianowego\n");
+		return;
+	}
+	double staraWartosc = lista->temperatura;
+	while (lista->nastepny) {
+		if (lista->poprzedni != NULL && lista->nastepny != NULL) {
+			double tmp = lista->temperatura;
+			if ((staraWartosc > lista->temperatura && staraWartosc < lista->nastepny->temperatura) ||
+				(staraWartosc < lista->temperatura && staraWartosc > lista->nastepny->temperatura)) { // mediana to lewy element
+				lista->temperatura = staraWartosc;
+			}
+			else if ((lista->nastepny->temperatura > lista->temperatura && lista->nastepny->temperatura < staraWartosc) ||
+					 (lista->nastepny->temperatura < lista->temperatura && lista->nastepny->temperatura > staraWartosc)) {
+				lista->temperatura = lista->nastepny->temperatura;
+			}
+			staraWartosc = tmp;
+		}
+		else if (lista->nastepny == NULL) {
+			return;
+		}
+		lista = lista->nastepny;
+	}
+}
+
+void ZapiszListeDoPliku(const char* nazwaout, struct pomiar* lista) {
+	FILE* out;
+	if (fopen_s(&out, nazwaout, "w+") == 0 && out != NULL) {
+		printf("info: poprawnie otwarto plik %s\n", nazwaout);
+		while (lista) {
+			fprintf(out, "%d\t%d\t%s\t%lf\n", lista->nrPomiaru, lista->nrCzujnika, lista->data, lista->temperatura);
+			lista = lista->nastepny;
+		}
+		printf("info: zapisano do liste, zmodyfikowana filtrowaniem medianowym\n");
+		printf("info: zamknieto plik %s\n", nazwaout);
+		fclose(out);
+	}
+	else {
+		printf("error - blad podczas otwierania pliku wyjsciowego\nkoniec programu\n");
+		exit(0);
+	}
+}
+
 int main() {
 	Info();
 	char nazwain[MAX_DLUGOSC_SLOWA] = "dane.txt";
+	char nazwaout[MAX_DLUGOSC_SLOWA] = "wynik_dla_dane.txt";
 
 	struct pomiar* lista = OtworzPlik(nazwain);
 	if (lista) {
@@ -238,6 +288,7 @@ int main() {
 		PoliczElementy(lista);
 
 		struct tablicaPomiarow tablica = Scal(&lista);
+		
 		for (int i = 0; i < tablica.liczbaPomiarow; i++) {
 			printf(ANSI_ZIELONY "czujnik nr. %d:\n" ANSI_BIALY, i + 1);
 			if (tablica.pomiary[i] != NULL) {
@@ -250,6 +301,11 @@ int main() {
 				printf("info: lista nie zawiera rekordow\n\n");
 			}
 		}
+		
+		// Zadanie II. poziomu
+		FiltrowanieMedianowe(tablica.pomiary[0]);
+		ZapiszListeDoPliku(nazwaout, tablica.pomiary[0]);
+
 		DealokujTabliceCzujnikow(&tablica); // nie trzeba dealokowac listy, bo po rozdzieleniu listy lista wskazuja na NULL
 	}
 	else {
