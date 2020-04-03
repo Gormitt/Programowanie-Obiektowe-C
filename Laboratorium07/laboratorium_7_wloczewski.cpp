@@ -28,7 +28,11 @@ struct tablicaPomiarow {
 void Info() {
 	printf("autor: \tMateusz Wloczewski\n");
 	printf("data: \t3 kwi 2020\n");
-	printf("about: \tProgram na Laboratoria nr. 7\n\n");
+	printf("about: \tProgram na Laboratoria nr. 7\n");
+	printf("\tProgram wczyta dane z pliku dane.txt do listy. Potem rozdzieli ja na tyle list ile jest czujnikow.\n");
+	printf("\tNastepnie dla kazdej listy wypisze liczbe rekordow, pierwszy i ostatni rekord.\n");
+	printf("\tNa koniec znajdzie i skopiuje rekord z najwyzsza temperatura na koniec kazdej z listy i ponownie\n");
+	printf("\twypisze liczbe rekordow wraz z pierwszym i ostatnim zapisem.\n\n");
 }
 
 void WypiszElement(struct pomiar* element) {
