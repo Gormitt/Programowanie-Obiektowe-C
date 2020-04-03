@@ -4,6 +4,13 @@
 #define MAX_LICZBA_CZUJNIKOW 10
 #define MAX_DLUGOSC_SLOWA 20
 
+#define ANSI_ZIELONY "\x1b[32m"
+#define ANSI_NIEBIESKI "\x1b[34m"
+#define ANSI_CYAN "\x1b[36m"
+#define ANSI_ZOLTY "\x1b[33m"
+#define ANSI_BIALY "\x1b[0m"
+#define ANSI_MAGNETA "\x1b[35m"
+
 struct pomiar {
 	int nrPomiaru;
 	int nrCzujnika;
@@ -17,6 +24,12 @@ struct tablicaPomiarow {
 	struct pomiar** pomiary;
 	int liczbaPomiarow;
 };
+
+void Info() {
+	printf("autor: \tMateusz Wloczewski\n");
+	printf("data: \t3 kwi 2020\n");
+	printf("about: \tProgram na Laboratoria nr. 7\n\n");
+}
 
 void WypiszElement(struct pomiar* element) {
 	printf("%d %d %s %.2lf\n", element->nrPomiaru, element->nrCzujnika, element->data, element->temperatura);
@@ -122,10 +135,6 @@ struct pomiar* OtworzPlik(const char* nazwain) {
 
 // Funkcja nr. 2
 void PoliczElementy(struct pomiar* lista) {
-	if (lista == NULL) {
-		printf("info: lista nie zawiera elementow\n\n");
-		return;
-	}
 	int suma = 0;
 	struct pomiar* pierwszy = NULL, * ostatni = NULL;
 	while (lista) {
@@ -135,10 +144,10 @@ void PoliczElementy(struct pomiar* lista) {
 		suma++;
 		lista = lista->nastepny;
 	}
-	printf("info: lista posiada %d rekordow\n", suma);
-	printf("pierwszy element: ");
+	printf(ANSI_MAGNETA "info: liczba rekordow = %d\n" ANSI_BIALY, suma);
+	printf(ANSI_CYAN "pierwszy element: " ANSI_BIALY);
 	WypiszElement(pierwszy);
-	printf("ostatni element: ");
+	printf(ANSI_CYAN "ostatni element: " ANSI_BIALY);
 	WypiszElement(ostatni);
 	printf("\n");
 }
@@ -166,7 +175,7 @@ struct tablicaPomiarow Scal(struct pomiar** lista) {
 			if ((*lista)->nrCzujnika > liczbaCzujnikow) {
 				liczbaCzujnikow = (*lista)->nrCzujnika;
 			}
-			(*lista) = tmp;
+			(*lista) = tmp; // po przejrzeniu ostatniego rekordu, lista wskazuje na NULL czyli jest pusta
 		}
 		free(ogon);
 		return tablicaPomiarow{ glowa, liczbaCzujnikow };
@@ -179,8 +188,6 @@ struct tablicaPomiarow Scal(struct pomiar** lista) {
 
 // Funkcja nr. 4
 struct pomiar* NajwyzszyNaKoniec(struct pomiar* lista) {
-	if (lista == NULL) return NULL;
-	
 	struct pomiar* wsk = lista;
 	struct pomiar* kopia = lista;
 	int pierwszy = 1;
@@ -195,35 +202,51 @@ struct pomiar* NajwyzszyNaKoniec(struct pomiar* lista) {
 		else lista = lista->nastepny;
 	}
 	// teraz wskaznik jest ustawiony na ostatnim elemencie
-	printf("najwyzsza temperatura: ");
+	printf(ANSI_ZOLTY "najwyzsza temperatura: " ANSI_BIALY);
 	WypiszElement(wsk);
-	printf("\n");
 	lista->nastepny = DodajElement(wsk, lista);
 
 	return kopia;
 }
 
-void DealokujTabliceCzujnikow(struct tablicaCzujnikow* tab) {
+void DealokujListe(struct pomiar* lista) {
+	while (lista) {
+		struct pomiar* tmp = lista->nastepny;
+		free(lista);
+		lista = tmp;
+	}
+}
 
+void DealokujTabliceCzujnikow(struct tablicaPomiarow* tab) {
+	for (int i = 0; i < tab->liczbaPomiarow; i++) {
+		DealokujListe(tab->pomiary[i]); // zwolnienie pamieci przeznaczonej na rekordy danego czujnika
+		tab->pomiary[i] = NULL; // ustawienie wskaznika na ten obszar jako NULL, aby nie miec do niego dostepu
+	}
 }
 
 int main() {
-	char nazwain[MAX_DLUGOSC_SLOWA] = "test1.txt";
+	Info();
+	char nazwain[MAX_DLUGOSC_SLOWA] = "dane.txt";
 
 	struct pomiar* lista = OtworzPlik(nazwain);
 	if (lista) {
-		printf("wszystkie czujniki:\n");
+		printf(ANSI_ZIELONY "wszystkie czujniki:\n" ANSI_BIALY);
 		PoliczElementy(lista);
 
 		struct tablicaPomiarow tablica = Scal(&lista);
 		for (int i = 0; i < tablica.liczbaPomiarow; i++) {
-			printf("czujnik nr. %d:\n", i + 1);
-			PoliczElementy(tablica.pomiary[i]);
-			tablica.pomiary[i] = NajwyzszyNaKoniec(tablica.pomiary[i]);
-			PoliczElementy(tablica.pomiary[i]);
+			printf(ANSI_ZIELONY "czujnik nr. %d:\n" ANSI_BIALY, i + 1);
+			if (tablica.pomiary[i] != NULL) {
+				PoliczElementy(tablica.pomiary[i]);
+				tablica.pomiary[i] = NajwyzszyNaKoniec(tablica.pomiary[i]);
+				printf("info: skopiowano rekord z najwyzsza temperatura na koniec\n\n");
+				PoliczElementy(tablica.pomiary[i]);
+			}
+			else {
+				printf("info: lista nie zawiera rekordow\n\n");
+			}
 		}
-
-
+		DealokujTabliceCzujnikow(&tablica); // nie trzeba dealokowac listy, bo po rozdzieleniu listy lista wskazuja na NULL
 	}
 	else {
 		printf("error: plik z danymi nie zawiera rekordow\n");
