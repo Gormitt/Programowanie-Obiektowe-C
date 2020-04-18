@@ -1,0 +1,12 @@
+data:	18.04.2020 02:44:34
+litery:	10
+dobre:	10
+zle:	0
+czas:	7.0 sekund
+
+data:	18.04.2020 02:44:59
+litery:	7
+dobre:	7
+zle:	0
+czas:	5.0 sekund
+

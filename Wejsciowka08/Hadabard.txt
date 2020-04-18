@@ -1,0 +1,6 @@
+data:	18.04.2020 02:44:48
+litery:	5
+dobre:	1
+zle:	4
+czas:	4.0 sekund
+

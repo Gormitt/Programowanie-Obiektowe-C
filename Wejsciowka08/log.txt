@@ -1,0 +1,59 @@
+18.04.2020 02:44:34	pobranie slowa: Gormit
+18.04.2020 02:44:34	dodanie nowego uzytkownika, utworzenie i otwarcie pliku Gormit.txt
+18.04.2020 02:44:35	uzytkownik Gormit podal liczbe: 10
+18.04.2020 02:44:35	w grze uzytkownika Gormit wylosowano litere c
+18.04.2020 02:44:36	uzytkownik Gormit podal poprawna odpowiedz
+18.04.2020 02:44:36	w grze uzytkownika Gormit wylosowano litere s
+18.04.2020 02:44:36	uzytkownik Gormit podal poprawna odpowiedz
+18.04.2020 02:44:36	w grze uzytkownika Gormit wylosowano litere z
+18.04.2020 02:44:37	uzytkownik Gormit podal poprawna odpowiedz
+18.04.2020 02:44:37	w grze uzytkownika Gormit wylosowano litere b
+18.04.2020 02:44:38	uzytkownik Gormit podal poprawna odpowiedz
+18.04.2020 02:44:38	w grze uzytkownika Gormit wylosowano litere h
+18.04.2020 02:44:39	uzytkownik Gormit podal poprawna odpowiedz
+18.04.2020 02:44:39	w grze uzytkownika Gormit wylosowano litere l
+18.04.2020 02:44:40	uzytkownik Gormit podal poprawna odpowiedz
+18.04.2020 02:44:40	w grze uzytkownika Gormit wylosowano litere k
+18.04.2020 02:44:40	uzytkownik Gormit podal poprawna odpowiedz
+18.04.2020 02:44:40	w grze uzytkownika Gormit wylosowano litere p
+18.04.2020 02:44:41	uzytkownik Gormit podal poprawna odpowiedz
+18.04.2020 02:44:41	w grze uzytkownika Gormit wylosowano litere b
+18.04.2020 02:44:42	uzytkownik Gormit podal poprawna odpowiedz
+18.04.2020 02:44:42	w grze uzytkownika Gormit wylosowano litere v
+18.04.2020 02:44:42	uzytkownik Gormit podal poprawna odpowiedz
+18.04.2020 02:44:42	zapisanie wyniku do pliku [10 dobrych, 0 zlych] zakonczenie gry gracza Gormit
+18.04.2020 02:44:42	zamkniecie pliku Gormit.txt
+18.04.2020 02:44:48	pobranie slowa: Hadabard
+18.04.2020 02:44:48	dodanie nowego uzytkownika, utworzenie i otwarcie pliku Hadabard.txt
+18.04.2020 02:44:50	uzytkownik Hadabard podal liczbe: 5
+18.04.2020 02:44:50	w grze uzytkownika Hadabard wylosowano litere p
+18.04.2020 02:44:51	uzytkownik Hadabard podal poprawna odpowiedz
+18.04.2020 02:44:51	w grze uzytkownika Hadabard wylosowano litere h
+18.04.2020 02:44:51	uzytkownik Hadabard podal niepoprawna odpowiedz [ ]
+18.04.2020 02:44:51	w grze uzytkownika Hadabard wylosowano litere v
+18.04.2020 02:44:53	uzytkownik Hadabard podal niepoprawna odpowiedz [h]
+18.04.2020 02:44:53	w grze uzytkownika Hadabard wylosowano litere l
+18.04.2020 02:44:53	uzytkownik Hadabard podal niepoprawna odpowiedz [v]
+18.04.2020 02:44:53	w grze uzytkownika Hadabard wylosowano litere y
+18.04.2020 02:44:54	uzytkownik Hadabard podal niepoprawna odpowiedz [l]
+18.04.2020 02:44:54	zapisanie wyniku do pliku [1 dobrych, 4 zlych] zakonczenie gry gracza Hadabard
+18.04.2020 02:44:54	zamkniecie pliku Hadabard.txt
+18.04.2020 02:44:59	pobranie slowa: Gormit
+18.04.2020 02:44:59	rozpoznanie uzytkownika, otwarcie pliku Gormit.txt
+18.04.2020 02:45:02	uzytkownik Gormit podal liczbe: 7
+18.04.2020 02:45:02	w grze uzytkownika Gormit wylosowano litere d
+18.04.2020 02:45:03	uzytkownik Gormit podal poprawna odpowiedz
+18.04.2020 02:45:03	w grze uzytkownika Gormit wylosowano litere v
+18.04.2020 02:45:04	uzytkownik Gormit podal poprawna odpowiedz
+18.04.2020 02:45:04	w grze uzytkownika Gormit wylosowano litere z
+18.04.2020 02:45:04	uzytkownik Gormit podal poprawna odpowiedz
+18.04.2020 02:45:04	w grze uzytkownika Gormit wylosowano litere v
+18.04.2020 02:45:05	uzytkownik Gormit podal poprawna odpowiedz
+18.04.2020 02:45:05	w grze uzytkownika Gormit wylosowano litere g
+18.04.2020 02:45:06	uzytkownik Gormit podal poprawna odpowiedz
+18.04.2020 02:45:06	w grze uzytkownika Gormit wylosowano litere e
+18.04.2020 02:45:06	uzytkownik Gormit podal poprawna odpowiedz
+18.04.2020 02:45:06	w grze uzytkownika Gormit wylosowano litere v
+18.04.2020 02:45:07	uzytkownik Gormit podal poprawna odpowiedz
+18.04.2020 02:45:07	zapisanie wyniku do pliku [7 dobrych, 0 zlych] zakonczenie gry gracza Gormit
+18.04.2020 02:45:07	zamkniecie pliku Gormit.txt
