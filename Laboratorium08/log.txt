@@ -1,23 +1,36 @@
-18.04.2020	04:53:03	uruchomienie programu
-18.04.2020	04:53:06	wczytanie nicku od uzytkownika
-18.04.2020	04:53:06	[Hadabard] rozpoczecie rozgrywki gracza
-18.04.2020	04:53:06	[Hadabard] utworzenie i otwarcie pliku gracza gra-Hadabard.txt
-18.04.2020	04:53:38	[Hadabard] zakonczenie rozgrywki, zapisanie logow do pliku
-18.04.2020	04:53:38	[Hadabard] zamkniecie pliku gracza gra-Hadabard.txt
-18.04.2020	04:53:40	[Hadabard] decyzja gracza o powtorzeniu rozgrywki
-18.04.2020	04:53:40	[Hadabard] rozpoczecie rozgrywki gracza
-18.04.2020	04:53:40	[Hadabard] znalezienie i otwarcie pliku gracza gra-Hadabard.txt
-18.04.2020	04:53:49	[Hadabard] zakonczenie rozgrywki, zapisanie logow do pliku
-18.04.2020	04:53:49	[Hadabard] zamkniecie pliku gracza gra-Hadabard.txt
-18.04.2020	04:53:51	[Hadabard] decyzja gracza o zakonczeniu rozgrywki
-18.04.2020	04:53:51	zamkniecie programu
+18.04.2020	05:41:57	uruchomienie programu
+18.04.2020	05:41:58	wczytanie nicku od uzytkownika
+18.04.2020	05:41:58	[Gracz1] rozpoczecie rozgrywki gracza
+18.04.2020	05:41:58	[Gracz1] utworzenie i otwarcie pliku gracza gra-Gracz1.txt
+18.04.2020	05:42:08	[Gracz1] zakonczenie rozgrywki, zapisanie logow do pliku
+18.04.2020	05:42:08	[Gracz1] zamkniecie pliku gracza gra-Gracz1.txt
+18.04.2020	05:42:09	[Gracz1] decyzja gracza o powtorzeniu rozgrywki
+18.04.2020	05:42:09	sredni czas wszystkich gier tego uzytkownika to 8.000000
+18.04.2020	05:42:09	[Gracz1] rozpoczecie rozgrywki gracza
+18.04.2020	05:42:09	[Gracz1] znalezienie i otwarcie pliku gracza gra-Gracz1.txt
+18.04.2020	05:42:29	[Gracz1] zakonczenie rozgrywki, zapisanie logow do pliku
+18.04.2020	05:42:29	[Gracz1] zamkniecie pliku gracza gra-Gracz1.txt
+18.04.2020	05:42:30	[Gracz1] decyzja gracza o zakonczeniu rozgrywki
+18.04.2020	05:42:30	sredni czas wszystkich gier tego uzytkownika to 13.000000
+18.04.2020	05:42:30	zamkniecie programu
 
-18.04.2020	04:53:52	uruchomienie programu
-18.04.2020	04:53:53	wczytanie nicku od uzytkownika
-18.04.2020	04:53:53	[Gormit] rozpoczecie rozgrywki gracza
-18.04.2020	04:53:53	[Gormit] utworzenie i otwarcie pliku gracza gra-Gormit.txt
-18.04.2020	04:54:06	[Gormit] zakonczenie rozgrywki, zapisanie logow do pliku
-18.04.2020	04:54:06	[Gormit] zamkniecie pliku gracza gra-Gormit.txt
-18.04.2020	04:54:07	[Gormit] decyzja gracza o zakonczeniu rozgrywki
-18.04.2020	04:54:07	zamkniecie programu
+18.04.2020	05:42:32	uruchomienie programu
+18.04.2020	05:42:34	wczytanie nicku od uzytkownika
+18.04.2020	05:42:34	[Gracz2] rozpoczecie rozgrywki gracza
+18.04.2020	05:42:34	[Gracz2] utworzenie i otwarcie pliku gracza gra-Gracz2.txt
+18.04.2020	05:42:38	[Gracz2] zakonczenie rozgrywki, zapisanie logow do pliku
+18.04.2020	05:42:38	[Gracz2] zamkniecie pliku gracza gra-Gracz2.txt
+18.04.2020	05:42:40	[Gracz2] decyzja gracza o zakonczeniu rozgrywki
+18.04.2020	05:42:40	sredni czas wszystkich gier tego uzytkownika to 2.000000
+18.04.2020	05:42:40	zamkniecie programu
+
+18.04.2020	05:42:41	uruchomienie programu
+18.04.2020	05:42:43	wczytanie nicku od uzytkownika
+18.04.2020	05:42:43	[Gracz2] rozpoczecie rozgrywki gracza
+18.04.2020	05:42:43	[Gracz2] znalezienie i otwarcie pliku gracza gra-Gracz2.txt
+18.04.2020	05:42:46	[Gracz2] zakonczenie rozgrywki, zapisanie logow do pliku
+18.04.2020	05:42:46	[Gracz2] zamkniecie pliku gracza gra-Gracz2.txt
+18.04.2020	05:42:47	[Gracz2] decyzja gracza o zakonczeniu rozgrywki
+18.04.2020	05:42:47	sredni czas wszystkich gier tego uzytkownika to 2.000000
+18.04.2020	05:42:47	zamkniecie programu
 

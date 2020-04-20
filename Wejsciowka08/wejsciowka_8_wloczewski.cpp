@@ -61,9 +61,7 @@ int CzyPlikIstnieje(char* nazwa) {
 
 void WyluskajSciezke(char* sciezka, const char* nazwaProjektu, const char* nazwaPliku) {
 	int dlugosc = strlen(sciezka) - 1;
-	int drugieZalamanie = 0;
-	while (sciezka[dlugosc] != '\\' || !drugieZalamanie) {
-		if (sciezka[dlugosc] == '\\') drugieZalamanie = 1;
+	while (sciezka[dlugosc] != '\\') {
 		dlugosc--;
 	}
 	sciezka[dlugosc] = '\0';

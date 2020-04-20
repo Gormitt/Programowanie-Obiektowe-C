@@ -8,6 +8,12 @@
 #define DL_DATY 80
 #define DL_SCIEZKI 150
 
+void Info() {
+	printf("autor:\tMateusz Wloczewski\n");
+	printf("data:\t18 kwi 2020\n");
+	printf("about \tRealizacja zadania II poziomu - Laboratorium 8\n\n");
+}
+
 void WyczyscBufor() {
 	while (getchar() != '\n') {}
 }
@@ -91,8 +97,26 @@ void Graj(FILE* log, FILE* zapisGracza, char* data, char* nick) {
 	fprintf(zapisGracza, "czas gry [sek]: %.2lf\npoprawne wpisy: %d\nniepoprawne wpisy: %d\n\n", czas, tak, nie);
 }
 
+double WyliczSredniCzas(FILE* zapisGracza) {
+	rewind(zapisGracza);
+	double czasSuma = 0;
+	double czas = 0;
+	int iloscGier = 0;
+	char wczyt[DL_SLOWA] = { '\0' };
+	while (!feof(zapisGracza)) {
+		fscanf_s(zapisGracza, "%s", wczyt, DL_SLOWA);
+		if (strcmp(wczyt, "[sek]:") == 0) {
+			fscanf_s(zapisGracza, "%lf", &czas);
+			czasSuma += czas;
+			iloscGier++;
+		}
+	}
+	return czasSuma / iloscGier;
+}
+
 int main() {
 	srand(time(NULL));
+	Info();
 
 	FILE* log, *zapisGracza;
 	if (fopen_s(&log, "log.txt", "a+") == 0 && log != NULL) {
@@ -122,8 +146,11 @@ int main() {
 
 			// uwaga: nie potrafie okreslic dlaczego dzialanie bledu powoduje przerwanie programu wyskakujacym oknem, a nie zaprogramowana wiadomoscia :(
 			errno_t numerBledu = fopen_s(&zapisGracza, nazwa, "a+"); 
+			double sredniCzas = 0;
 			if (numerBledu == 0 && zapisGracza != NULL) { // otwarcie fopen_s w trybie a+ tworzy lub nadpisuje plik
 				Graj(log, zapisGracza, data, nick);
+				
+				sredniCzas = WyliczSredniCzas(zapisGracza);
 				ZapiszLog(log, nick, "zakonczenie rozgrywki, zapisanie logow do pliku\n");
 
 				ZapiszLog(log, nick, "zamkniecie pliku gracza ");
@@ -145,12 +172,16 @@ int main() {
 					decyduje = 0;
 					gra = 0;
 					ZapiszLog(log, nick, "decyzja gracza o zakonczeniu rozgrywki\n");
+					
 				}
 				else if (tmp == 1) {
 					decyduje = 0;
 					ZapiszLog(log, nick, "decyzja gracza o powtorzeniu rozgrywki\n");
 				}
 			}
+			ZapiszLog(log, "sredni czas wszystkich gier tego uzytkownika to ");
+			fprintf(log, "%lf\n", sredniCzas);
+			
 		}
 
 		ZapiszLog(log, "zamkniecie programu\n\n");
