@@ -235,7 +235,6 @@ int main() {
 		p[i].KonfigurujFigure(xa, ya, dlGora, xb, yb, k);
 	}
 
-	/*
 	while (true) {
 		printf("\njaka figure chcesz edytowac ('p' - prostokat, 't' - trapez)\naby wyjsc napisz 'q'\n");
 		char wpis;
@@ -293,8 +292,8 @@ int main() {
 			p[indeks].WypiszWspolrzedne();
 		}
 	}
-	*/
-
+	
+	// zadanie II poziomu
 	while (true) {
 		char wpis;
 		int a = 0, b = 0;
