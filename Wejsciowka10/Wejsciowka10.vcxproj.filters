@@ -18,5 +18,27 @@
     <ClCompile Include="wejsciowka_10_wloczewski.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BazaEmail.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Wykladowca.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BazaEmail.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Stale.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Wykladowca.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="in.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -138,7 +138,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BazaEmail.cpp" />
     <ClCompile Include="wejsciowka_10_wloczewski.cpp" />
+    <ClCompile Include="Wykladowca.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BazaEmail.h" />
+    <ClInclude Include="Stale.h" />
+    <ClInclude Include="Wykladowca.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="in.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
