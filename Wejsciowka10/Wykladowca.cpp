@@ -15,19 +15,16 @@ Wykladowca::Wykladowca(const char* nazwa) {
 		char mail[DL_TABLICY] = { '\0' };
 		while (!feof(in)) {
 			fscanf_s(in, "%s", mail, DL_TABLICY);
-			if (strlen(mail) > 0) {
-				liczba++;
-			}
+			if (strlen(mail) > 0) liczba++;
 		}
 		rewind(in);
 
-		BazaEmail b(liczba);
+		BazaEmail* b = new BazaEmail(liczba);
 		for (int i = 0; i < liczba; i++) {
 			fscanf_s(in, "%s", mail, DL_TABLICY);
-			b.Setemail(mail, i);
+			(*b).SetEmail(mail, i);
 		}
-		
-		Wykladowca::baza = &b;
+		Wykladowca::baza = b;
 	}
 	else {
 		printf("error - nie udalo sie otworzyc pliku\n");
@@ -37,4 +34,12 @@ Wykladowca::Wykladowca(const char* nazwa) {
 
 Wykladowca::Wykladowca(Wykladowca& w) {
 	Wykladowca::baza = NULL;
+}
+
+Wykladowca::~Wykladowca() {
+	for (int i = 0; i < Wykladowca::baza->GetIle(); i++) {
+		delete Wykladowca::baza->GetEmail(i); // usuwanie przydzialu pamieci na kazdego maila w bazie
+	}
+	delete Wykladowca::baza->GetEmaile(); // usuwanie przydzialu na wskazniki do kazdego maila w bazie
+	delete Wykladowca::baza; // usuwanie przydzialu pamieci na element listy dynamicznej
 }

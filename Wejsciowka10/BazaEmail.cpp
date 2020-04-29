@@ -5,33 +5,41 @@
 BazaEmail::BazaEmail(int x) {
 	BazaEmail::nast = NULL;
 	BazaEmail::ile = x;
-	BazaEmail::email = (char**)calloc(sizeof(char*), x);
+	BazaEmail::email = new char* [x];
 	if (BazaEmail::email != NULL) {
 		for (int i = 0; i < x; i++) {
-			BazaEmail::email[i] = (char*)calloc(sizeof(char), DL_TABLICY);
+			BazaEmail::email[i] = new char[DL_TABLICY];
 		}
 	}
 }
 
-BazaEmail::BazaEmail(BazaEmail& mk) {
+BazaEmail::BazaEmail(BazaEmail& b) {
 	BazaEmail::nast = NULL;
-	BazaEmail::ile = mk.ile;
-	BazaEmail::email = (char**)calloc(sizeof(char*), mk.ile);
+	BazaEmail::ile = b.ile;
+	BazaEmail::email = new char* [b.ile];
 
 	if (BazaEmail::email != NULL) {
 		for (int i = 0; i < ile; i++) {
-			BazaEmail::email[i] = (char*)calloc(sizeof(char), DL_TABLICY);
+			email[i] = new char[DL_TABLICY];
 			if (BazaEmail::email[i] != NULL) {
-				strcpy_s(BazaEmail::email[i], DL_TABLICY, mk.email[i]);
+				strcpy_s(BazaEmail::email[i], DL_TABLICY, b.GetEmail(i));
 			}
 		}
 	}
 }
 
-void BazaEmail::Setemail(char* adres, int idx) {
+void BazaEmail::SetEmail(char* adres, int idx) {
 	strcpy_s(BazaEmail::email[idx], DL_TABLICY, adres);
 }
 
-char* BazaEmail::Getemail(int idx) {
+char** BazaEmail::GetEmaile(void) {
+	return BazaEmail::email;
+}
+
+char* BazaEmail::GetEmail(int idx) {
 	return BazaEmail::email[idx];
+}
+
+int BazaEmail::GetIle(void) {
+	return BazaEmail::ile;
 }
