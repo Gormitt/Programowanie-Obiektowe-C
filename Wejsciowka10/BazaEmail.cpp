@@ -32,6 +32,10 @@ void BazaEmail::SetEmail(char* adres, int idx) {
 	strcpy_s(BazaEmail::email[idx], DL_TABLICY, adres);
 }
 
+void BazaEmail::SetNast(BazaEmail* element) {
+	BazaEmail::nast = element;
+}
+
 char** BazaEmail::GetEmaile(void) {
 	return BazaEmail::email;
 }
@@ -42,4 +46,8 @@ char* BazaEmail::GetEmail(int idx) {
 
 int BazaEmail::GetIle(void) {
 	return BazaEmail::ile;
+}
+
+BazaEmail* BazaEmail::GetNast(void) {
+	return BazaEmail::nast;
 }

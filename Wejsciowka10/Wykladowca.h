@@ -3,10 +3,14 @@
 
 class Wykladowca {
 private:
-	BazaEmail* baza;
+	BazaEmail*	baza;
+	BazaEmail*	ostatni;
+	char		nazwisko[DL_SLOWA];
 public:
-	Wykladowca();
-	Wykladowca(const char*);
-	Wykladowca(Wykladowca&);
+	Wykladowca(char*);
+	Wykladowca(char*, char*);
+	Wykladowca(char*, Wykladowca&);
 	~Wykladowca();
+	void	DodajElement(const char*);
+	void	WypiszListe(void);
 };
