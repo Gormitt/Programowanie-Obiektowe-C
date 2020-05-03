@@ -21,9 +21,15 @@
     <ClCompile Include="Trapez.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Prostokat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Trapez.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Prostokat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

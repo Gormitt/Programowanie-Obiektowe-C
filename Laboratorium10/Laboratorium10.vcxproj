@@ -139,9 +139,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="laboratorium_10_wloczewski.cpp" />
+    <ClCompile Include="Prostokat.cpp" />
     <ClCompile Include="Trapez.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Prostokat.h" />
     <ClInclude Include="Trapez.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
