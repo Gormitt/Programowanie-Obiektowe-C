@@ -14,14 +14,19 @@ Prostokat::Prostokat(double ax, double ay, double pozioma, double pionowa, int k
 		printf("error - dlugosc pionowa nie moze byc ujemna lub zerowa, zmieniam jej dlugosc na 1\n");
 	}
 
-	UstawFigure(ax, ay, pozioma, pionowa, kPoziomy, kPionowy);
+	Prostokat::UstawFigure(ax, ay, pozioma, pionowa, kPoziomy, kPionowy);
 }
 
 Prostokat::Prostokat() {
-	UstawFigure(0, 0, 1, 1, 1, 1);
+	Prostokat::UstawFigure(0, 0, 1, 1, 1, 1);
+}
+
+Prostokat::Prostokat(Prostokat& p) {
+	Prostokat::UstawFigure(p.ax, p.ay, p.pozioma, p.pionowa, p.kPoziomy, p.kPionowy);
 }
 
 void Prostokat::UstawFigure(double ax, double ay, double pozioma, double pionowa, int kPoziomy, int kPionowy) {
+	Prostokat::nastepny = NULL;
 	Prostokat::ax = ax;
 	Prostokat::ay = ay;
 	Prostokat::pozioma = pozioma;
@@ -55,6 +60,14 @@ void Prostokat::ZwiekszPole(Prostokat& p) {
 	double docelowePole = Prostokat::GetPole() + p.GetPole();
 	double skala = sqrt(docelowePole / Prostokat::GetPole());
 	Prostokat::Skaluj(skala);
+}
+
+void Prostokat::SetNastepny(Prostokat* p) {
+	Prostokat::nastepny = p;
+}
+
+Prostokat* Prostokat::GetNastepny() {
+	return Prostokat::nastepny;
 }
 
 double Prostokat::GetPole() {

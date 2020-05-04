@@ -30,7 +30,12 @@ Trapez::Trapez() {
 	Trapez::UstawFigure(1, 1, 0, 0, 1, 1);
 }
 
+Trapez::Trapez(Trapez& t) {
+	Trapez::UstawFigure(t.ax, t.ay, t.bx, t.by, t.gorna, t.kierunek);
+}
+
 void Trapez::UstawFigure(double ax, double ay, double bx, double by, double gorna, int kierunek) {
+	Trapez::nastepny = NULL;
 	Trapez::ax = ax;
 	Trapez::ay = ay;
 	Trapez::bx = bx;
@@ -75,6 +80,14 @@ void Trapez::ZwiekszPole(Trapez& t) {
 	double docelowePole = Trapez::GetPole() + t.GetPole();
 	double skala = sqrt(docelowePole / Trapez::GetPole());
 	Trapez::Skaluj(skala);
+}
+
+void Trapez::SetNastepny(Trapez* t) {
+	Trapez::nastepny = t;
+}
+
+Trapez* Trapez::GetNastepny() {
+	return Trapez::nastepny;
 }
 
 double Trapez::GetPole() {
