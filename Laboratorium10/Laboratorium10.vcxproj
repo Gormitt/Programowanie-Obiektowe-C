@@ -138,11 +138,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Kolekcja.cpp" />
     <ClCompile Include="laboratorium_10_wloczewski.cpp" />
     <ClCompile Include="Prostokat.cpp" />
     <ClCompile Include="Trapez.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Kolekcja.h" />
     <ClInclude Include="Prostokat.h" />
     <ClInclude Include="Trapez.h" />
   </ItemGroup>
