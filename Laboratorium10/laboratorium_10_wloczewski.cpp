@@ -4,7 +4,14 @@
 #include "Prostokat.h"
 #include "Kolekcja.h"
 
+void Info() {
+	printf("data: \t4 maj 2020\n");
+	printf("autor: \tMateusz Wloczewski\n");
+	printf("about: \tRealizacja programu na labolatoria nr. 10\n\n");
+}
+
 int main() {
+	Info();
 	Trapez* trapezA = new Trapez();
 	Trapez* trapezB = new Trapez(2, 2, 0, 0, 3, 1);
 	Trapez* trapezC = new Trapez(*trapezB);
@@ -36,5 +43,5 @@ int main() {
 	return 0;
 
 	// wywo³ania konstruktorow : 7 [3 trapezy, 3 prostokaty, 1 kolekcja]
-	// wywo³ania nastêuj¹ w miejscach gdzie tworzone s¹ obiekty tzn. linia 8-13 wlacznie oraz 15
+	// wywo³ania nastêuj¹ w miejscach gdzie tworzone s¹ obiekty tzn. linia 15-20 wlacznie oraz 22
 }
