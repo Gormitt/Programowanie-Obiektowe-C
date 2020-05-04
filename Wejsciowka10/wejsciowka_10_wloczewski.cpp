@@ -30,5 +30,13 @@ int main() {
 	w2.WypiszListe();
 	w3.WypiszListe();
 
+	// Oprocz konstuktorow oznaczonych w funkcji main:
+	// Za kazdym razem, kiedy tworzony jest obiekt klasy wykladowca wywolywany jest rownoczesnie konstruktor klasy BazaEmail.
+	// Dzieje sie tak, poniewaz kazdy wykladowca ma swoje grupy studenckie, a kazda grupa studencka jest "schowana" w obiekcie klasy BazaEmail.
+	// Ponadto, podczas wywolania metody DodajElement na obiektach klasy Wykladowca, dodawa jest kolejna baza email, zatem wywolywany jest konstruktor tej klasy.
+	
+	// Zatem oprocz 3 konstruktorow w funkcji main nastepuje 5 wywolan konstruktora klasy BazaEmail.
+	// W kodzie latwo to rozpoznac, bo konstruktor klasy BazaEmail jest wywolany tylko w metodzie, ktora za argument przyjmuje nazwe pliku.
+	// Pozostale metody kopiuja wskaznik do istniejacej listy dynamicznej [zatem brak tu nowej alokacji konstruktorem] albo tworza pusty obiekt [iniciujac NULL-em].
 	return 0;
 }
