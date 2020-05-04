@@ -64,7 +64,7 @@ void Kolekcja::Symetria(double x) {
 }
 
 void Kolekcja::Skala(double x) {
-	printf("wykonuje symetrie wszystkich figur w kolekcji wg. osi x = %lf\n\n", x);
+	printf("wykonuje skalowanie wszystkich figur w kolekcji wg. skali x = %lf\n\n", x);
 	Trapez* tmp1 = Kolekcja::glowaT;
 	Prostokat* tmp2 = Kolekcja::glowaP;
 	while (tmp1) {
