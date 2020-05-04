@@ -12,6 +12,7 @@ void Info() {
 
 int main() {
 	Info();
+	// zadanie I poziomu
 	Trapez* trapezA = new Trapez();
 	Trapez* trapezB = new Trapez(2, 2, 0, 0, 3, 1);
 	Trapez* trapezC = new Trapez(*trapezB);
@@ -40,8 +41,17 @@ int main() {
 	delete prostokatA;
 	delete prostokatB;
 	delete prostokatC;
+
+	// zadanie II poziomu
+	printf("trapez, ktory zostal stworzony na podstawie prostokata:\n");
+	Prostokat* pr = new Prostokat(3, 1, 4, 2, 1, -1);
+	Trapez* tr = new Trapez(*pr);
+	(*tr).Wypisz();
+	delete pr;
+	delete tr;
 	return 0;
 
-	// wywo³ania konstruktorow : 7 [3 trapezy, 3 prostokaty, 1 kolekcja]
-	// wywo³ania nastêuj¹ w miejscach gdzie tworzone s¹ obiekty tzn. linia 15-20 wlacznie oraz 22
+	// wywolania konstruktorow : 7 [3 trapezy, 3 prostokaty, 1 kolekcja]
+	// wywolania nastêpuja w miejscach gdzie tworzone sa obiekty tzn. linie 16-21 wlacznie oraz linia 23 [zadanie I poziomu]
+	// wywolanie nastêpuje rowniez w liniach 46 i 47 [zadanie II poziomu]
 }

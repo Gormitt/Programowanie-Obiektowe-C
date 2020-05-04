@@ -1,4 +1,5 @@
 #pragma once
+
 class Prostokat {
 private:
 	Prostokat*	nastepny;
@@ -18,5 +19,7 @@ public:
 	void		SetNastepny(Prostokat* p);
 	Prostokat*	GetNastepny();
 	double		GetPole();
+	
+	friend class Trapez;
 };
 

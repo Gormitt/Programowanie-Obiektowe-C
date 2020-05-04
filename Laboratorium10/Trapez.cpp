@@ -34,6 +34,22 @@ Trapez::Trapez(Trapez& t) {
 	Trapez::UstawFigure(t.ax, t.ay, t.bx, t.by, t.gorna, t.kierunek);
 }
 
+Trapez::Trapez(Prostokat& p) {
+	Trapez::nastepny = NULL;
+	Trapez::ax = p.ax;
+	Trapez::bx = p.ax;
+	if (p.kPionowy == 1) {
+		Trapez::ay = p.ay + p.pionowa;
+		Trapez::by = p.ay;
+	}
+	else {
+		Trapez::ay = p.ay;
+		Trapez::by = p.ay - p.pionowa;
+	}
+	Trapez::gorna = p.pozioma;
+	Trapez::kierunek = p.kPoziomy;
+}
+
 void Trapez::UstawFigure(double ax, double ay, double bx, double by, double gorna, int kierunek) {
 	Trapez::nastepny = NULL;
 	Trapez::ax = ax;

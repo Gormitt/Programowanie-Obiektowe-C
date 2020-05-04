@@ -1,4 +1,5 @@
 #pragma once
+#include "Prostokat.h"
 
 class Trapez {
 private:
@@ -12,6 +13,7 @@ public:
 	Trapez();
 	Trapez(double ax, double ay, double bx, double by, double gorna, int kierunek);
 	Trapez(Trapez& t);
+	Trapez(Prostokat& p);
 	void	Wypisz();
 	void	Symetria(double x);
 	void	Skaluj(double x);
