@@ -29,6 +29,7 @@ int main() {
 	w1.WypiszListe();
 	w2.WypiszListe();
 	w3.WypiszListe();
+	// Destruktory zostaje wywolane na koniec programu [dodalem w nich instrukcje, informujaca uzytkownika co jest usuwane].
 
 	// Oprocz konstuktorow oznaczonych w funkcji main:
 	// Za kazdym razem, kiedy tworzony jest obiekt klasy wykladowca wywolywany jest rownoczesnie konstruktor klasy BazaEmail.
