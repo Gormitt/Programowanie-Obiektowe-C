@@ -140,9 +140,11 @@
   <ItemGroup>
     <ClCompile Include="Baza.cpp" />
     <ClCompile Include="wejsciowka_11_wloczewski.cpp" />
+    <ClCompile Include="Wykladowca.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Baza.h" />
+    <ClInclude Include="Wykladowca.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

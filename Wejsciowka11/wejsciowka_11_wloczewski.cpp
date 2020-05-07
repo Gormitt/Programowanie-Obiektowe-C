@@ -1,19 +1,31 @@
 #include <iostream>
 
+#include "Wykladowca.h"
 #include "Baza.h"
 
 int main() {
-	char email1[DL_SLOWA] = "mateusz.wloczewski00@gmail.com";
-	char email2[DL_SLOWA] = "mikolaj.grzegorzewski@gmail.com";
+	char plik1[DL_SLOWA] = "plik1.txt";
+	char plik2[DL_SLOWA] = "plik2.txt";
+	char plik3[DL_SLOWA] = "plik3.txt";
+	char plik4[DL_SLOWA] = "plik4.txt";
+	char plik5[DL_SLOWA] = "plik5.txt";
 
-	Baza b1(2);
-	b1.SetMail(0, email1);
-	b1.SetMail(1, email2);
-	
-	printf("%s\n%s\n\n", b1.GetMail(0), b1.GetMail(1));
+	Wykladowca w1("Trojanowski");
+	w1.DodajGrupe(plik1);
+	w1.DodajGrupe(plik2);
+	w1.DodajGrupe(plik3);	
+	Wykladowca w2("Kowalski", w1);
+	w2.DodajGrupe(plik4);
+	w2.DodajGrupe(plik5);
+	Wykladowca w3("Wloczewski");
 
-	Baza b2(b1);
+	w1.Wypisz();
+	w2.Wypisz();
+	w3.Wypisz();
 
-	printf("%s\n%s\n\n", b2.GetMail(0), b2.GetMail(1));
+	w2.SzukajId(3);
+	w2.SzukajId(3);
+	w3.SzukajId(3);
+
 	return 0;
 }
