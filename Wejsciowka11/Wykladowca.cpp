@@ -74,7 +74,7 @@ void Wykladowca::DodajGrupe(char* plik) {
 }
 
 void Wykladowca::SzukajId(int id) {
-	printf("info - rozpoczynam poszukiwania gr. o id: %d\n", id);
+	printf("info - [prof. %s] rozpoczynam poszukiwania gr. o id: %d\n", Wykladowca::nazwisko, id);
 	if (Wykladowca::glowa == NULL) {
 		printf("error - prof. %s nie posiada zadnej przypisanej grupy\n\n", Wykladowca::nazwisko);
 	}
