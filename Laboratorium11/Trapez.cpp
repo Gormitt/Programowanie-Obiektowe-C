@@ -26,9 +26,9 @@ Trapez::Trapez(double ax, double ay, double bx, double by, double gorna, int kie
 		printf("error - aby mozna bylo narysowac trapez, zmieniam kierunek rysowania\n");
 	}
 
-	Trapez::UstawFigure(ax, ay, bx, by, gorna, kierunek);
+	this->UstawFigure(ax, ay, bx, by, gorna, kierunek);
 	Trapez::liczbaWszystkich++;
-	Trapez::poleWszystkich += Trapez::GetPole();
+	Trapez::poleWszystkich += this->GetPole();
 }
 
 Trapez::Trapez() : 
@@ -38,7 +38,7 @@ Trapez::Trapez() :
 	gorna(1), 
 	kierunek(1) {
 	Trapez::liczbaWszystkich++;
-	Trapez::poleWszystkich += Trapez::GetPole();
+	Trapez::poleWszystkich += this->GetPole();
 }
 
 Trapez::Trapez(Trapez& t) : 
@@ -50,7 +50,7 @@ Trapez::Trapez(Trapez& t) :
 	gorna(t.gorna), 
 	kierunek(t.kierunek) {
 	Trapez::liczbaWszystkich++;
-	Trapez::poleWszystkich += Trapez::GetPole();
+	Trapez::poleWszystkich += this->GetPole();
 }
 
 Trapez::Trapez(Prostokat& p) :
@@ -60,91 +60,91 @@ Trapez::Trapez(Prostokat& p) :
 	gorna(p.pozioma),
 	kierunek(p.kPoziomy) {
 	if (p.kPionowy == 1) {
-		Trapez::ay = p.ay + p.pionowa;
-		Trapez::by = p.ay;
+		this->ay = p.ay + p.pionowa;
+		this->by = p.ay;
 	}
 	else {
-		Trapez::ay = p.ay;
-		Trapez::by = p.ay - p.pionowa;
+		this->ay = p.ay;
+		this->by = p.ay - p.pionowa;
 	}
 	Trapez::liczbaWszystkich++;
-	Trapez::poleWszystkich += Trapez::GetPole();
+	Trapez::poleWszystkich += this->GetPole();
 }
 
 Trapez::~Trapez() {
 	Trapez::liczbaWszystkich--;
-	Trapez::poleWszystkich -= Trapez::GetPole();
-	delete Trapez::nastepny;
+	Trapez::poleWszystkich -= this->GetPole();
+	delete this->nastepny;
 }
 
 void Trapez::UstawFigure(double ax, double ay, double bx, double by, double gorna, int kierunek) {
-	Trapez::nastepny = NULL;
-	Trapez::ax = ax;
-	Trapez::ay = ay;
-	Trapez::bx = bx;
-	Trapez::by = by;
-	Trapez::gorna = gorna;
-	Trapez::kierunek = kierunek;
+	this->nastepny = NULL;
+	this->ax = ax;
+	this->ay = ay;
+	this->bx = bx;
+	this->by = by;
+	this->gorna = gorna;
+	this->kierunek = kierunek;
 }
 
 void Trapez::Wypisz() {
-	double dolna = ((ax < bx && kierunek == 1) || (ax > bx&& kierunek == -1)) ? (Trapez::gorna - 2 * abs(ax - bx)) : (Trapez::gorna + 2 * abs(ax - bx));
-	double tmp1 = Trapez::ax + (Trapez::gorna * Trapez::kierunek);
-	double tmp2 = Trapez::bx + (dolna * Trapez::kierunek);
+	double dolna = ((this->ax < this->bx && this->kierunek == 1) || (this->ax > this->bx && this->kierunek == -1)) ? (this->gorna - 2 * abs(this->ax - this->bx)) : (this->gorna + 2 * abs(this->ax - this->bx));
+	double tmp1 = this->ax + (this->gorna * this->kierunek);
+	double tmp2 = this->bx + (dolna * this->kierunek);
 	printf("wsp. gornej podstawy: (%.1lf, %.1lf) i (%.1lf, %.1lf)\tdl.: %.1lf  \n", Trapez::ax, Trapez::ay, tmp1, Trapez::ay, Trapez::gorna);
 	printf("wsp. dolnej podstawy: (%.1lf, %.1lf) i (%.1lf, %.1lf)\tdl.: %.1lf\n\n", Trapez::bx, Trapez::by, tmp2, Trapez::by, dolna);
 }
 
 void Trapez::Symetria(double x) {
-	Trapez::ax = (Trapez::ax < x) ? (x + abs(Trapez::ax - x)) : (x - abs(Trapez::ax - x));
-	Trapez::bx = (Trapez::bx < x) ? (x + abs(Trapez::bx - x)) : (x - abs(Trapez::bx - x));
-	Trapez::kierunek = (Trapez::kierunek < 0) ? 1 : -1;
+	this->ax = (this->ax < x) ? (x + abs(this->ax - x)) : (x - abs(this->ax - x));
+	this->bx = (this->bx < x) ? (x + abs(this->bx - x)) : (x - abs(this->bx - x));
+	this->kierunek = (this->kierunek < 0) ? 1 : -1;
 }
 
 void Trapez::Skaluj(double x) {
-	double dolna = ((ax < bx && kierunek == 1) || (ax > bx&& kierunek == -1)) ? (Trapez::gorna - 2 * abs(ax - bx)) : (Trapez::gorna + 2 * abs(ax - bx));
-	double wysokosc = abs(Trapez::ay - Trapez::by);
+	double dolna = ((this->ax < this->bx && this->kierunek == 1) || (this->ax > this->bx&& this->kierunek == -1)) ? (this->gorna - 2 * abs(this->ax - this->bx)) : (this->gorna + 2 * abs(this->ax - this->bx));
+	double wysokosc = abs(this->ay - this->by);
 
-	Trapez::gorna *= x;
+	this->gorna *= x;
 	dolna *= x;
 	wysokosc *= x;
 
-	if (Trapez::gorna < dolna) {
-		Trapez::by = Trapez::ay - wysokosc;
-		Trapez::bx = Trapez::ax + (dolna - gorna) / 2 * kierunek * -1;
+	if (this->gorna < dolna) {
+		this->by = this->ay - wysokosc;
+		this->bx = this->ax + (dolna - this->gorna) / 2 * this->kierunek * -1;
 	}
 	else {
-		Trapez::ay = Trapez::by + wysokosc;
-		Trapez::ax = Trapez::bx + (gorna - dolna) / 2 * kierunek * -1;
+		this->ay = this->by + wysokosc;
+		this->ax = this->bx + (this->gorna - dolna) / 2 * this->kierunek * -1;
 	}
 }
 
 void Trapez::ZwiekszPole(Trapez& t) {
-	double docelowePole = Trapez::GetPole() + t.GetPole();
-	double skala = sqrt(docelowePole / Trapez::GetPole());
-	Trapez::Skaluj(skala);
+	double docelowePole = this->GetPole() + t.GetPole();
+	double skala = sqrt(docelowePole / this->GetPole());
+	this->Skaluj(skala);
 }
 
 Trapez* Trapez::SzukajDrugiego(Trapez* t) {
 	if (this != t && Trapez::kierunek == (*t).kierunek &&abs(Trapez::gorna - (*t).gorna) < 0.001 &&
-		abs(Trapez::ax - (*t).ax) < 0.001 && abs(Trapez::ay - (*t).ay) < 0.001 &&
-		abs(Trapez::bx - (*t).bx) < 0.001 && abs(Trapez::by - (*t).by) < 0.001)
+		abs(this->ax - (*t).ax) < 0.001 && abs(this->ay - (*t).ay) < 0.001 &&
+		abs(this->bx - (*t).bx) < 0.001 && abs(this->by - (*t).by) < 0.001)
 		return this;
-	else if (Trapez::nastepny != NULL) return Trapez::nastepny->SzukajDrugiego(t);
+	else if (this->nastepny != NULL) return this->nastepny->SzukajDrugiego(t);
 	else return NULL;
 }
 
 void Trapez::SetNastepny(Trapez* t) {
-	Trapez::nastepny = t;
+	this->nastepny = t;
 }
 
 Trapez* Trapez::GetNastepny() {
-	return Trapez::nastepny;
+	return this->nastepny;
 }
 
 double Trapez::GetPole() {
-	double dolna = ((ax < bx && kierunek == 1) || (ax > bx&& kierunek == -1)) ? (Trapez::gorna - 2 * abs(ax - bx)) : (Trapez::gorna + 2 * abs(ax - bx));
-	return (Trapez::gorna + dolna) * 0.5 * (abs(Trapez::ay - Trapez::by));
+	double dolna = ((this->ax < this->bx && this->kierunek == 1) || (this->ax > this->bx&& this->kierunek == -1)) ? (this->gorna - 2 * abs(this->ax - this->bx)) : (this->gorna + 2 * abs(this->ax - this->bx));
+	return (this->gorna + dolna) * 0.5 * (abs(this->ay - this->by));
 }
 
 int Trapez::GetLiczbaWszystkich() { // definicja metody statycznej

@@ -20,7 +20,7 @@ Prostokat::Prostokat(double ax, double ay, double pozioma, double pionowa, int k
 
 	Prostokat::UstawFigure(ax, ay, pozioma, pionowa, kPoziomy, kPionowy);
 	Prostokat::liczbaWszystkich++;
-	Prostokat::poleWszystkich += Prostokat::GetPole();
+	Prostokat::poleWszystkich += this->GetPole();
 }
 
 Prostokat::Prostokat() :
@@ -32,7 +32,7 @@ Prostokat::Prostokat() :
 	kPoziomy(1),
 	kPionowy(1) {
 	Prostokat::liczbaWszystkich++;
-	Prostokat::poleWszystkich += Prostokat::GetPole();
+	Prostokat::poleWszystkich += this->GetPole();
 }
 
 Prostokat::Prostokat(Prostokat& p) :
@@ -44,12 +44,12 @@ Prostokat::Prostokat(Prostokat& p) :
 	kPoziomy(p.kPoziomy),
 	kPionowy(p.kPionowy) {
 	Prostokat::liczbaWszystkich++;
-	Prostokat::poleWszystkich += Prostokat::GetPole();
+	Prostokat::poleWszystkich += this->GetPole();
 }
 
 Prostokat::~Prostokat() {
 	Prostokat::liczbaWszystkich--;
-	Prostokat::poleWszystkich -= Prostokat::GetPole();
+	Prostokat::poleWszystkich -= this->GetPole();
 	delete this->nastepny;
 }
 
@@ -84,9 +84,9 @@ void Prostokat::Skaluj(double x) {
 }
 
 void Prostokat::ZwiekszPole(Prostokat& p) {
-	double docelowePole = Prostokat::GetPole() + p.GetPole();
-	double skala = sqrt(docelowePole / Prostokat::GetPole());
-	Prostokat::Skaluj(skala);
+	double docelowePole = this->GetPole() + p.GetPole();
+	double skala = sqrt(docelowePole / this->GetPole());
+	this->Skaluj(skala);
 }
 
 Prostokat* Prostokat::SzukajDrugiego(Prostokat* p) {
