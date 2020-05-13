@@ -50,37 +50,37 @@ Prostokat::Prostokat(Prostokat& p) :
 Prostokat::~Prostokat() {
 	Prostokat::liczbaWszystkich--;
 	Prostokat::poleWszystkich -= Prostokat::GetPole();
-	delete Prostokat::nastepny;
+	delete this->nastepny;
 }
 
 void Prostokat::UstawFigure(double ax, double ay, double pozioma, double pionowa, int kPoziomy, int kPionowy) {
-	Prostokat::ax = ax;
-	Prostokat::ay = ay;
-	Prostokat::pozioma = pozioma;
-	Prostokat::pionowa = pionowa;
-	Prostokat::kPoziomy = kPoziomy;
-	Prostokat::kPionowy = kPionowy;
+	this->ax = ax;
+	this->ay = ay;
+	this->pozioma = pozioma;
+	this->pionowa = pionowa;
+	this->kPoziomy = kPoziomy;
+	this->kPionowy = kPionowy;
 }
 
 void Prostokat::Wypisz() {
-	double bx = Prostokat::ax + Prostokat::pozioma * Prostokat::kPoziomy;
-	double cy = Prostokat::ay + Prostokat::pionowa * Prostokat::kPionowy;
-	double dx = Prostokat::ax + Prostokat::pozioma * Prostokat::kPoziomy;
-	double dy = Prostokat::ay + Prostokat::pionowa * Prostokat::kPionowy;
+	double bx = this->ax + this->pozioma * this->kPoziomy;
+	double cy = this->ay + this->pionowa * this->kPionowy;
+	double dx = this->ax + this->pozioma * this->kPoziomy;
+	double dy = this->ay + this->pionowa * this->kPionowy;
 
-	printf("wymiary: %.1lf x %.1lf\n", Prostokat::pozioma, Prostokat::pionowa);
-	printf("wsp. podstawy A: (%.1lf, %.1lf) oraz (%.1lf, %.1lf)  \n", Prostokat::ax, Prostokat::ay, bx, Prostokat::ay);
-	printf("wsp. podstawy B: (%.1lf, %.1lf) oraz (%.1lf, %.1lf)\n\n", Prostokat::ax, cy, dx, dy);
+	printf("wymiary: %.1lf x %.1lf\n", this->pozioma, this->pionowa);
+	printf("wsp. podstawy A: (%.1lf, %.1lf) oraz (%.1lf, %.1lf)  \n", this->ax, this->ay, bx, this->ay);
+	printf("wsp. podstawy B: (%.1lf, %.1lf) oraz (%.1lf, %.1lf)\n\n", this->ax, cy, dx, dy);
 }
 
 void Prostokat::Symetria(double x) {
-	Prostokat::ax = (Prostokat::ax < x) ? (x + abs(Prostokat::ax - x)) : (x - abs(Prostokat::ax - x));
-	Prostokat::kPoziomy = (Prostokat::kPoziomy < 0) ? 1 : -1;
+	this->ax = (this->ax < x) ? (x + abs(this->ax - x)) : (x - abs(this->ax - x));
+	this->kPoziomy = (this->kPoziomy < 0) ? 1 : -1;
 }
 
 void Prostokat::Skaluj(double x) {
-	Prostokat::pozioma *= x;
-	Prostokat::pionowa *= x;
+	this->pozioma *= x;
+	this->pionowa *= x;
 }
 
 void Prostokat::ZwiekszPole(Prostokat& p) {
@@ -90,23 +90,23 @@ void Prostokat::ZwiekszPole(Prostokat& p) {
 }
 
 Prostokat* Prostokat::SzukajDrugiego(Prostokat* p) {
-	if (this != p && abs(Prostokat::ax - (*p).ax) < 0.001 && abs(Prostokat::ay - (*p).ay) < 0.001 &&
-		abs(Prostokat::pozioma - (*p).pozioma) < 0.001 && abs(Prostokat::pionowa < (*p).pionowa) < 0.001 &&
-		Prostokat::kPoziomy == (*p).kPoziomy && Prostokat::kPionowy == (*p).kPionowy) return this;
-	else if (Prostokat::nastepny != NULL) return Prostokat::nastepny->SzukajDrugiego(p);
+	if (this != p && abs(this->ax - (*p).ax) < 0.001 && abs(this->ay - (*p).ay) < 0.001 &&
+		abs(this->pozioma - (*p).pozioma) < 0.001 && abs(this->pionowa < (*p).pionowa) < 0.001 &&
+		this->kPoziomy == (*p).kPoziomy && this->kPionowy == (*p).kPionowy) return this;
+	else if (this->nastepny != NULL) return this->nastepny->SzukajDrugiego(p);
 	else return NULL;
 }
 
 void Prostokat::SetNastepny(Prostokat* p) {
-	Prostokat::nastepny = p;
+	this->nastepny = p;
 }
 
 Prostokat* Prostokat::GetNastepny() {
-	return Prostokat::nastepny;
+	return this->nastepny;
 }
 
 double Prostokat::GetPole() {
-	return Prostokat::pozioma * Prostokat::pionowa;
+	return this->pozioma * this->pionowa;
 }
 
 int Prostokat::GetLiczbaWszystkich() {
