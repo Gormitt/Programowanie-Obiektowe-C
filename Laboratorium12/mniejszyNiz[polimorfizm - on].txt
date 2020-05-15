@@ -1,0 +1,45 @@
+auto o bagazniku mniejszym od 70000.0 [L]
+samochod osobowy:
+marka:		Toyota
+model:		Careena
+rocznik:	1997
+przebieg:	100000
+bagaznik:	100.0L
+sylwetka:	H
+
+ciezarowka o ladownosci mniejszej od 70000.0 [kg]
+samochod ciezarowy:
+marka:		Scania
+model:		Highline
+rocznik:	2005
+przebieg:	1500000
+ladwonosc:	50000.0L
+liczba kol:	24
+
+auto o bagazniku mniejszym od 70000.0 [L]
+samochod osobowy:
+marka:		Volvo
+model:		V40
+rocznik:	2005
+przebieg:	50000
+bagaznik:	125.0L
+sylwetka:	C
+
+ciezarowka o ladownosci mniejszej od 70000.0 [kg]
+samochod ciezarowy:
+marka:		Scania
+model:		Normal
+rocznik:	2015
+przebieg:	750000
+ladwonosc:	60000.0L
+liczba kol:	16
+
+auto o bagazniku mniejszym od 70000.0 [L]
+samochod osobowy:
+marka:		Toyota
+model:		Avensis
+rocznik:	2015
+przebieg:	20000
+bagaznik:	150.0L
+sylwetka:	K
+

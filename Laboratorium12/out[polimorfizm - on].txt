@@ -1,0 +1,48 @@
+samochod osobowy:
+marka:		Toyota
+model:		Careena
+rocznik:	1997
+przebieg:	100000
+bagaznik:	100.0L
+sylwetka:	H
+
+samochod ciezarowy:
+marka:		Scania
+model:		Highline
+rocznik:	2005
+przebieg:	1500000
+ladwonosc:	50000.0L
+liczba kol:	24
+
+samochod osobowy:
+marka:		Volvo
+model:		V40
+rocznik:	2005
+przebieg:	50000
+bagaznik:	125.0L
+sylwetka:	C
+
+samochod ciezarowy:
+marka:		Mercedes
+model:		TGX
+rocznik:	2010
+przebieg:	2500000
+ladwonosc:	75000.0L
+liczba kol:	18
+
+samochod ciezarowy:
+marka:		Scania
+model:		Normal
+rocznik:	2015
+przebieg:	750000
+ladwonosc:	60000.0L
+liczba kol:	16
+
+samochod osobowy:
+marka:		Toyota
+model:		Avensis
+rocznik:	2015
+przebieg:	20000
+bagaznik:	150.0L
+sylwetka:	K
+

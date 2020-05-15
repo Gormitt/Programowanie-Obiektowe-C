@@ -13,6 +13,17 @@ public:
 	Samochod();
 	Samochod(Samochod& samochod);
 	Samochod(int rocznik, int przebieg, char* marka, char* model);
+	~Samochod();
+	// Do wybory sa dwie deklaracje
+	// 1.: void Wypisz(FILE* out); - metoda niepolimorficzna [kompilator podczas wywolania wyszuka metode z klasy Samochod]
+	// 2.: virtual void Wypisz(FILE* out) = 0; - metoda polimorficzna [kompilator podczas wywolania poszuka definicji z klasy dziedziczacej]
+	void Wypisz(FILE* out);
+	
+	// Do wybory sa dwie deklaracje
+	// 1.: void WypiMniejszyNizsz(FILE* out, float wielkosc); - metoda niepolimorficzna [kompilator podczas wywolania wyszuka metode z klasy Samochod]
+	// 2.: virtual void MniejszyNiz(FILE* out, float wielkosc) = 0; - metoda polimorficzna [kompilator podczas wywolania poszuka definicji z klasy dziedziczacej]
+	void MniejszyNiz(FILE* out, float wielkosc);
+
 	// settery
 	void SetNastepny(Samochod* nastepnySamochod);
 	void SetRocznik(int rocznik);

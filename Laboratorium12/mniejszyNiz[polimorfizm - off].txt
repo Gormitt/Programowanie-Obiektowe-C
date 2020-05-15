@@ -1,0 +1,21 @@
+samochod wyprodukowany wczesniej niz w 2010:
+samochod:
+marka:		Toyota
+model:		Careena
+rocznik:	1997
+przebieg:	100000
+
+samochod wyprodukowany wczesniej niz w 2010:
+samochod:
+marka:		Scania
+model:		Highline
+rocznik:	2005
+przebieg:	1500000
+
+samochod wyprodukowany wczesniej niz w 2010:
+samochod:
+marka:		Volvo
+model:		V40
+rocznik:	2005
+przebieg:	50000
+

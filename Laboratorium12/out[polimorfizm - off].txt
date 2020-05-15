@@ -1,0 +1,36 @@
+samochod:
+marka:		Toyota
+model:		Careena
+rocznik:	1997
+przebieg:	100000
+
+samochod:
+marka:		Scania
+model:		Highline
+rocznik:	2005
+przebieg:	1500000
+
+samochod:
+marka:		Volvo
+model:		V40
+rocznik:	2005
+przebieg:	50000
+
+samochod:
+marka:		Mercedes
+model:		TGX
+rocznik:	2010
+przebieg:	2500000
+
+samochod:
+marka:		Scania
+model:		Normal
+rocznik:	2015
+przebieg:	750000
+
+samochod:
+marka:		Toyota
+model:		Avensis
+rocznik:	2015
+przebieg:	20000
+

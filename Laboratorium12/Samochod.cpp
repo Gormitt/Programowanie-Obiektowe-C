@@ -25,6 +25,33 @@ Samochod::Samochod(int rocznik, int przebieg, char* marka, char* model) :
 	strcpy_s(this->model, DL, model);
 }
 
+Samochod::~Samochod() {
+	delete this->nastepny;
+}
+
+void Samochod::Wypisz(FILE* out) {
+	fprintf(out, "samochod:\n");
+	fprintf(out, "marka:\t\t%s\n", this->marka);
+	fprintf(out, "model:\t\t%s\n", this->model);
+	fprintf(out, "rocznik:\t%d\n", this->rocznik);
+	fprintf(out, "przebieg:\t%d\n\n", this->przebieg);
+	/*
+	printf("marka:\t\t%s\n", this->marka);
+	printf("model:\t\t%s\n", this->model);
+	printf("rocznik:\t%d\n", this->rocznik);
+	printf("przebieg:\t%d\n\n", this->przebieg);
+	*/
+}
+
+void Samochod::MniejszyNiz(FILE* out, float wielkosc) {
+	if (this->rocznik < wielkosc) {
+		fprintf(out, "samochod wyprodukowany wczesniej niz w %d:\n", (int)wielkosc);
+		this->Wypisz(out);
+	}
+	if (this->nastepny != NULL) Samochod::nastepny->MniejszyNiz(out, wielkosc);
+	else return;
+}
+
 // settery
 void Samochod::SetNastepny(Samochod* s) { this->nastepny = s; }
 void Samochod::SetRocznik(int r) { this->rocznik = r; }
