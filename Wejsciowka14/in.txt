@@ -1,0 +1,11 @@
+s Mateusz 20 3 1 UKSW
+s Marek 21 2 2 UW
+s Mikolaj 23 3 4 PW
+w Tomasz 35 4 5 programowanie-obiektowe doktor
+w Krzysztof 40 3 4 programowanie-obiektowe profesor-uksw
+w Marek 50 2 3 matematyka-dyskretna profesor-uksw
+s Tomasz 20 3 1 PJATK
+w Mieczyslaw 70 5 7 logika profesor
+s Grzegorz 23 4 1 UW
+w Tomasz 50 4 3 teoria-mnogosci profesor-uksw
+w Marek 40 3 6 analiza-matematyczna profesor-uksw
